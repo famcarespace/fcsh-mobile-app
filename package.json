@@ -10,7 +10,6 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/slider": "4.1.12",
     "@react-native-picker/picker": "2.2.1",
@@ -20,6 +19,11 @@
     "@react-navigation/native-stack": "^6.2.5",
     "expo": "~44.0.0",
     "expo-av": "~10.2.0",
+    "expo-camera": "~12.1.2",
+    "expo-image-picker": "~12.0.1",
+    "expo-images-picker": "^2.2.5",
+    "expo-media-library": "~14.0.0",
+    "expo-screen-orientation": "~4.1.1",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -33,8 +37,7 @@
     "react-native-web": "0.17.1",
     "react-navigation": "^4.4.4",
     "undefined": "@expo/vector-icons/Ionicons",
-    "expo-camera": "~12.1.2",
-    "expo-image-picker": "~12.0.1"
+    "@react-native-community/datetimepicker": "4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

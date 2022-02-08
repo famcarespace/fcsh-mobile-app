@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, Image} from "react-native"
+import { SafeAreaView, View, Text, Image} from "react-native"
 import styles from "../../../assets/styles"
 import CommentFeed from "../../components/Activity/Comment";
 import Subscribe from "../../components/Subscribe"
@@ -9,7 +9,7 @@ const CommentsScreen = ({ navigation, route }) => {
     const {item} = route.params
     const [commentFeed, setCommentFeed] = React.useState(item.Comments)
     return (
-      <View style={styles.mainContentContainer}>
+      <SafeAreaView style={styles.mainContentContainer}>
             <View style={[styles.card]}>
                 <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
                     <Image source={item.UserPic}
@@ -21,9 +21,9 @@ const CommentsScreen = ({ navigation, route }) => {
             <CommentFeed comments={commentFeed}/>
             <CommentForm comments={commentFeed} setCommentFeed={setCommentFeed}/>
 
-    </View>
+        </View>
         <Subscribe navigation={navigation}/>
-      </View>
+        </SafeAreaView>
     );
 }
 

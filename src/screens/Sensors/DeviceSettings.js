@@ -2,6 +2,7 @@ import React from "react"
 import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
+import Tooltip from "../../components/Tooltip"
 
 const DeviceSettingsScreen = ({navigation, route }) => {
     const {device} = route.params
@@ -22,7 +23,9 @@ const DeviceSettingsScreen = ({navigation, route }) => {
                     Battery: {device.battery}%
                 </Text>
             }
-            <Text>Location</Text>
+            <Text>Location
+                <Tooltip msg='Where is this device placed?'/>
+            </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={setLocation}

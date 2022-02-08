@@ -14,6 +14,10 @@ import ActivityStreamScreen from '../screens/Activity/ActvityStream'
 import CommentsScreen from '../screens/Activity/Comments';
 import NewPostScreen from '../screens/Activity/NewPost';
 import CameraScreen from '../screens/Activity/CameraScreen';
+import UserInfoScreen from '../screens/Settings/UserInfo';
+import SettingsScreen from '../screens/Settings/Settings';
+import UpdatePasswordScreen from '../screens/Settings/UpdatePassword';
+import ImageGalleryScreen from '../screens/Activity/ImageGallery';
 
 const Stack = createNativeStackNavigator()
 
@@ -54,5 +58,15 @@ export const NewPostStackNavigator = () => (
     <Stack.Navigator>
         <Stack.Screen name='New Post' component={NewPostScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Camera' component={CameraScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Album' component={ImageGalleryScreen}/>
+    </Stack.Navigator>
+)
+
+export const SettingsStackNavigator = () => (
+    <Stack.Navigator>
+        <Stack.Screen name='Settings Landing' component={SettingsScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Userinfo' component={UserInfoScreen} options={{headerTitle:''}}/>
+        <Stack.Screen name='Zone Selector' component={SelectorScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Update Password' component={UpdatePasswordScreen}/>
     </Stack.Navigator>
 )

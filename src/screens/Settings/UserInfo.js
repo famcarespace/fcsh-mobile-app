@@ -1,25 +1,36 @@
-import React from "react"
-import { View, Text, Image } from "react-native"
-import gateway from '../../../assets/images/gateway.png'
+import React,{useState, useEffect} from "react"
+import { SafeAreaView, View, Text } from "react-native"
 import styles from "../../../assets/styles"
 
-const UserInfoScreen = ({ navigation, route }) => {
+const UserInfoScreen = () => {
+
     return (
-        <View
-        style={[styles.card, styles.row]}>
-        {<Image style={styles.imgIcon}
-        source={gateway}/>}
-        <View>
-          <Text style={styles.cardHeader}>Gateway</Text>
-          <Text style={styles.textMuted}>
-            30:ae:7b:f1:e3:65
-          </Text>
+      <SafeAreaView style={styles.mainContentContainer}>
+      <View style={styles.innerContainer}>
+        <View style={styles.card}>
+            <Text>
+              <Text style={styles.textMuted}>Username: </Text>
+              guestuser
+          </Text> 
           <Text>
-            <Text style={styles.textMuted}>IP: </Text>
-            http://192.168.0.112
+              <Text style={styles.textMuted}>Location: </Text>
+              New Hampshire
+          </Text> 
+          <Text>
+              <Text style={styles.textMuted}>Contact: </Text>
+              +1-(321)-236-4777
+          </Text> 
+          <Text>
+              <Text style={styles.textMuted}>Email: </Text>
+              info@familycarespace.com
+          </Text> 
+          <Text>
+              <Text style={styles.textMuted}>Role: </Text>
+              Family Admin
           </Text> 
         </View>
       </View>
+      </SafeAreaView>
     );
 }
 

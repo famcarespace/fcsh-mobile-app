@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, View, Image, Text, TouchableOpacity } from "react-native"
+import { FlatList, View, Image, Text, TouchableOpacity, Modal } from "react-native"
 import styles from "../../../assets/styles"
 import {approvePost} from '../../utils/activity-stream.js'
 import MediaSlider from "../../components/Activity/MediaSlider"
@@ -8,6 +8,7 @@ import Subscribe from '../../components/Subscribe'
 
 
 const ActivityStreamScreen = ({ navigation, route }) => {
+  const [modalOpen, setModalOpen] = React.useState(false)
 
   const renderItem = ({item}) => (
     <View style={[styles.card]}>
@@ -46,7 +47,11 @@ const ActivityStreamScreen = ({ navigation, route }) => {
   return (
     <View style={styles.mainContentContainer}>
       <View style={[styles.innerContainer, styles.marginBottom]}>
-        <Text>All posts are approved by Family Admin</Text>
+      <TouchableOpacity style={[styles.row]}
+        onPress={()=> setModalOpen(!modalOpen)}>
+          <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
+          <Text> Who approves new posts?</Text>
+      </TouchableOpacity>
       </View>
       <FlatList
         data={approvePost}
@@ -55,6 +60,27 @@ const ActivityStreamScreen = ({ navigation, route }) => {
         extraData={navigation}
       />
       <Subscribe navigation={navigation}/>
+      <Modal
+        animationType="fade"
+        transparent={false}
+        visible={modalOpen}
+        onRequestClose={() => {
+          setModalVisible(!modalOpen);
+        }}>
+        <View style={styles.centered}>
+          <View style={styles.card}>
+            <Text style={styles.marginBottom}>
+              One of the family members takes the role of family admin and is reponsible for approving new content
+              and adding new members to the app.
+            </Text>
+          </View>
+          <TouchableOpacity
+              style={[styles.button,{marginTop:-20}]}
+              onPress={() => setModalOpen(!modalOpen)}>
+              <Text style={styles.buttonText}>Got it! Let's move on.</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }

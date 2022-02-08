@@ -1,15 +1,17 @@
 import React from "react"
 import { View, Text, Dimensions, 
   SafeAreaView,FlatList, 
-  Pressable} from "react-native"
+  Pressable, Modal, TouchableOpacity} from "react-native"
 
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {allAlerts} from "../../utils/device-data"
+import {MaterialIcons} from '@expo/vector-icons'
 
 const AllAlertingRulesScreen = ({ navigation, route }) => {
     const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
     const width = Dimensions.get('window').width
+    const [modalOpen, setModalOpen] = React.useState(false)
 
     const renderItem = ({item}) => {
       return(
@@ -53,6 +55,11 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
+      <TouchableOpacity style={[styles.marginBottom, styles.row]}
+        onPress={()=> setModalOpen(!modalOpen)}>
+          <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
+          <Text> What are alerts?</Text>
+        </TouchableOpacity>
         {allAlerts.length>0?
           <FlatList data={allAlerts}
             renderItem={renderItem}
@@ -62,6 +69,32 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         }
       </View>
       <Subscribe navigation={navigation}/>
+      <Modal
+        animationType="fade"
+        transparent={false}
+        visible={modalOpen}
+        onRequestClose={() => {
+          setModalVisible(!modalOpen);
+        }}>
+        <View style={styles.centered}>
+          <View style={styles.card}>
+            <Text style={styles.marginBottom}>Notifications are sent to registered email/phone when an alert is triggered.</Text>
+            <Text style={styles.marginBottom}>For example, you'd like to receive a notification if front door remains open for more than 20 mins at night</Text>
+            <Text style={styles.marginBottom}>To do this, place a contact sensor on front door and set up an alert as follows: </Text>
+            <Text><Text style={styles.textMuted}>Start Time: </Text> 9:00pm</Text>
+            <Text><Text style={styles.textMuted}>End Time: </Text> 7:00am</Text>
+            <Text><Text style={styles.textMuted}>Status: </Text> open</Text>
+            <Text><Text style={styles.textMuted}>Days: </Text> everyday</Text>
+            <Text><Text style={styles.textMuted}>Timer: </Text> yes</Text>
+            <Text><Text style={styles.textMuted}>Duration: </Text> 20 mins</Text>
+          </View>
+          <Pressable
+              style={[styles.button,{marginTop:-20}]}
+              onPress={() => setModalOpen(!modalOpen)}>
+              <Text style={styles.buttonText}>Got it! Let's move on.</Text>
+          </Pressable>
+        </View>
+      </Modal>
       </SafeAreaView>
     )
 }

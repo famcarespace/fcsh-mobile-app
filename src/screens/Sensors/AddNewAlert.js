@@ -8,6 +8,7 @@ import {MaterialIcons} from '@expo/vector-icons'
 
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
+import Tooltip from "../../components/Tooltip"
 
 const convertToDate = (value) => {
   var d = new Date()
@@ -33,6 +34,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
   const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
+  const [show, setShow] = useState(false);
 
   useEffect(()=>{
     if(route.params?.selected){
@@ -65,10 +67,16 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   return(
       <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
+        <Text style={styles.marginBottom}>
+          Ex: Send notification if a motion sensor in garage detects movement late at night
+        </Text>
         <View style={[styles.card]}>
           <View style={[styles.marginBottom]}>
             {/****** START TIME ******/}
-            <Text style={styles.textMuted}>Start Time</Text>
+            <Text style={styles.textMuted}>
+              Start Time
+              <Tooltip msg='Start time and end time are used to set an interval for observing this sensor'/>
+            </Text>
             <RNDateTimePicker
               testID='startTimePicker'
               value={from}
@@ -76,7 +84,9 @@ const AddNewAlertScreen = ({ navigation, route }) => {
               is24Hour={true}
               display='default'
               onChange={(event, newTime)=> {
-                setFrom(new Date(newTime))
+                let selected = new Date(newTime) || from
+                setShow(Platform.OS === 'ios')
+                setFrom(selected)
               }}/>
             </View>
 
@@ -90,19 +100,26 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                   is24Hour={true}
                   display='default'
                   onChange={(event, newTime)=> {
-                    setTo(new Date(newTime))
+                    let selected = new Date(newTime) || to
+                    setShow(Platform.OS === 'ios')
+                    setTo(selected)
                   }}/>
             </View>
              {/****** STATUS ******/}
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
-              <Text style={[styles.textMuted,{flex:1}]}>{label}</Text>
+              <Text style={[styles.textMuted,{flex:1}]}>
+                {label}
+                <Tooltip msg='Sensor activity that triggers the alert.'/>
+              </Text>
               <View style={[styles.row, styles.pushRight]}>
                 <Text>{status}</Text>
                 <TouchableOpacity
                   onPress={()=> navigation.navigate({
                     name: 'Selector',
                     params: { value: status,
-                      options:opts},
+                      options:opts,
+                      prevScreen:'New Alert',
+                      setting:'status'},
                   })}>
                   <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
                 </TouchableOpacity>
@@ -133,7 +150,12 @@ const AddNewAlertScreen = ({ navigation, route }) => {
             </View>
             {/****** TIMER ******/}
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
-              <Text style={[styles.textMuted,{flex:1}]}>Timer</Text>
+              <Text style={[styles.textMuted,{flex:1}]}>
+                Timer
+                <Tooltip msg={`Ex without timer: alert triggered as soon as front door is opened.
+
+Ex with timer: Alert triggered when front door remains open for more than 10 mins.`}/>
+              </Text>
               <View style={[styles.row, styles.pushRight]}>
                 <Switch
                   onValueChange={()=>setTimer(!timer)}
@@ -158,9 +180,9 @@ const AddNewAlertScreen = ({ navigation, route }) => {
             </View>
             }
       </View>
-      <TouchableOpacity style={[styles.button,{marginTop:-20}]} 
+      <TouchableOpacity
             onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Update</Text>
+                <Text style={styles.link}>Update</Text>
       </TouchableOpacity>
     </View>
     <Subscribe navigation={navigation}/>
