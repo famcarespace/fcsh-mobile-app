@@ -18,6 +18,8 @@ import UserInfoScreen from '../screens/Settings/UserInfo';
 import SettingsScreen from '../screens/Settings/Settings';
 import UpdatePasswordScreen from '../screens/Settings/UpdatePassword';
 import ImageGalleryScreen from '../screens/Activity/ImageGallery';
+import LoginScreen from '../screens/Common/Login';
+import AddUsersScreen from '../screens/Settings/AddUsers';
 
 const Stack = createNativeStackNavigator()
 
@@ -68,5 +70,12 @@ export const SettingsStackNavigator = () => (
         <Stack.Screen name='Userinfo' component={UserInfoScreen} options={{headerTitle:''}}/>
         <Stack.Screen name='Zone Selector' component={SelectorScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Update Password' component={UpdatePasswordScreen}/>
+        <Stack.Screen name='Add Members' component={AddUsersScreen}/>
     </Stack.Navigator>
 )
+
+export const AuthStackNavigator = () => {
+    <Stack.Navigator>
+        <Stack.Screen name='Login' compoenent={LoginScreen} options={{headerShown:false}}/>
+    </Stack.Navigator>
+}

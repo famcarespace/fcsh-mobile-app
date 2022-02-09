@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
   //    flex:1,
       borderColor:"#e1e5eb",
       borderRadius:2,
-      color:"#495057"
+      color:"#495057",
+      width:'80%'
     },
     hr:{
       borderBottomColor: "#e1e5eb",

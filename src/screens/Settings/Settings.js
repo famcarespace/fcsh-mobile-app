@@ -113,6 +113,20 @@ const SettingsScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+        {/***** New Users ****/}
+        <View style={[styles.card, styles.row,{alignItems:'center'}]}>
+          <Text style={[styles.textMuted,{flex:1}]}>
+            Add Members
+          </Text>
+          <View style={[styles.row, styles.pushRight]}>
+            <TouchableOpacity
+              onPress={()=> navigation.navigate({
+                name: 'Add Members',
+              })}>
+              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
       </SafeAreaView>
     );
