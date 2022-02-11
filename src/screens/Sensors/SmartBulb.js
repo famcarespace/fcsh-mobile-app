@@ -1,5 +1,5 @@
 import React,{useState} from "react"
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, TouchableOpacity, Platform } from "react-native"
 import styles from "../../../assets/styles"
 import {MaterialIcons} from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
@@ -29,7 +29,7 @@ const SmartBulbScreen = ({navigation, route }) => {
             <Text style={styles.marginBottom}>
                 {power? 'Power On':'Power Off'}
             </Text>
-            {device.cat==='bulb' &&
+            {(device.cat==='bulb'&&Platform.OS==='ios') &&
             <View style={{width:"100%"}}>
                 <Text style={styles.textLeft}>Hue</Text>
                 <Slider

@@ -1,40 +1,30 @@
-import React, {useState, useEffect} from "react"
-import { View, Text,
-SafeAreaView, Platform, Switch,
-TouchableOpacity,
+import React, {useState, useEffect, useLayoutEffect} from "react"
+import { ScrollView, Text, View,
+SafeAreaView, Switch,
+TouchableOpacity, Button,
 TextInput} from "react-native"
-import RNDateTimePicker from '@react-native-community/datetimepicker'
 import {MaterialIcons} from '@expo/vector-icons'
 
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
 
-const convertToDate = (value) => {
-  var d = new Date()
-  d.setHours(value.slice(0,2))
-  d.setMinutes(value.slice(3))
-  return d
-}
 
-const convertToString = (value) => {
-  
-  let res = value.toTimeString().replace(':','').slice(0,4)
-  console.log(res)
-  return res
+
+const getCurrTime = () => {
+ return (new Date().getHours()+':'+new Date().getMinutes())
 }
 
 const AddNewAlertScreen = ({ navigation, route }) => {
   const {deviceId, rule, label, opts, newAlert} = route.params
-  const [from, setFrom] = useState(newAlert? new Date():convertToDate(String(rule.from)))
-  const [to, setTo] = useState(newAlert? new Date():convertToDate(String(rule.to)))
+  const [from, setFrom] = useState(newAlert? getCurrTime:rule.from)
+  const [to, setTo] = useState(newAlert? getCurrTime:rule.to)
   const [status, setStatus] = useState(newAlert?opts[0]:rule.status)
   const [days, setDays] = useState(newAlert?[0,0,0,0,0,0,0]:rule.days)
   const [timer, setTimer] = useState(newAlert?false:rule.timer)
   const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
   const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
-  const [show, setShow] = useState(false);
 
   useEffect(()=>{
     if(route.params?.selected){
@@ -48,10 +38,28 @@ const AddNewAlertScreen = ({ navigation, route }) => {
     }
   },[route.params?.checked])
 
+  useEffect(()=>{
+    if(route.params?.selectedTime){
+      if(route.params.setting==='startTime'){
+        setFrom(route.params.selectedTime.slice(0,5))
+      }
+      else
+      setTo(route.params.selectedTime.slice(0,5))
+    }
+  },[route.params?.selectedTime])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={handleSubmit} title="Save" />
+      ),
+    });
+  }, [navigation])
+
   const handleSubmit = () => {
     const newRule = {
-      from: convertToString(from),
-      to: convertToString(to),
+      from: from,
+      to: to,
       status: status,
       days:days,
       timer:timer,
@@ -61,49 +69,51 @@ const AddNewAlertScreen = ({ navigation, route }) => {
       }
     }
     if(newRule)
-      alert('Alert Added')
-    else alert('Alert Updated')
+      alert('Alert Set')
   }
   return(
       <SafeAreaView style={styles.mainContentContainer}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.marginBottom}>
-          Ex: Send notification if a motion sensor in garage detects movement late at night
+      <ScrollView>
+        <View style={styles.innerContainer}>
+        <Text style={[styles.marginBottom,{paddingHorizontal:20}]}>
+          Ex: Alert me if a motion sensor in garage detects movement late at night
         </Text>
         <View style={[styles.card]}>
-          <View style={[styles.marginBottom]}>
-            {/****** START TIME ******/}
-            <Text style={styles.textMuted}>
+          {/****** START TIME ******/}
+          <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
+            <Text style={[styles.textMuted,{flex:1}]}>
               Start Time
               <Tooltip msg='Start time and end time are used to set an interval for observing this sensor'/>
             </Text>
-            <RNDateTimePicker
-              testID='startTimePicker'
-              value={from}
-              mode='time'
-              is24Hour={true}
-              display='default'
-              onChange={(event, newTime)=> {
-                let selected = new Date(newTime) || from
-                setShow(Platform.OS === 'ios')
-                setFrom(selected)
-              }}/>
+            <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
+                <Text>{from} hrs</Text>
+                <TouchableOpacity
+                  onPress={()=> navigation.navigate({
+                    name: 'TimeSelector',
+                    params: { value: from,
+                      prevScreen:'New Alert',
+                      setting:'startTime'}
+                  })}>
+                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                </TouchableOpacity>
+              </View>
             </View>
 
-             {/****** END TIME ******/}
-            <View style={[styles.marginBottom]}>
-              <Text style={styles.textMuted}>End Time</Text>
-              <RNDateTimePicker
-                  testID='endTimePicker'
-                  value={to}
-                  mode='time'
-                  is24Hour={true}
-                  display='default'
-                  onChange={(event, newTime)=> {
-                    let selected = new Date(newTime) || to
-                    setShow(Platform.OS === 'ios')
-                    setTo(selected)
-                  }}/>
+            {/****** END TIME ******/}
+            <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
+            <Text style={[styles.textMuted,{flex:1}]}>End Time</Text>
+              <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
+                <Text>{to} hrs</Text>
+                <TouchableOpacity
+                  onPress={()=> navigation.navigate({
+                    name: 'TimeSelector',
+                    params: { value: to,
+                      prevScreen:'New Alert',
+                      setting:'endTime'}
+                  })}>
+                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                </TouchableOpacity>
+              </View>
             </View>
              {/****** STATUS ******/}
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
@@ -156,7 +166,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
 
 Ex with timer: Alert triggered when front door remains open for more than 10 mins.`}/>
               </Text>
-              <View style={[styles.row, styles.pushRight]}>
+              <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
                 <Switch
                   onValueChange={()=>setTimer(!timer)}
                   trackColor={{false:'lightgray', true:'dodgerblue'}}
@@ -166,7 +176,7 @@ Ex with timer: Alert triggered when front door remains open for more than 10 min
             </View>
             {/****** DURATION ******/}
             {timer &&
-            <View style={[styles.marginBottom]}>
+            <View style={[styles.marginBottom,{zIndex:-1}]}>
               <Text style={styles.textMuted}>Hours</Text>
               <TextInput value={hrs}
               placeholder='Set Hours'
@@ -180,11 +190,8 @@ Ex with timer: Alert triggered when front door remains open for more than 10 min
             </View>
             }
       </View>
-      <TouchableOpacity
-            onPress={handleSubmit}>
-                <Text style={styles.link}>Update</Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
     <Subscribe navigation={navigation}/>
     </SafeAreaView>
   )

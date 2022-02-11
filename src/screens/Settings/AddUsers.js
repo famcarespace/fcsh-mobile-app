@@ -1,5 +1,5 @@
-import React,{useState} from "react"
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Modal } from "react-native"
+import React,{useState, useLayoutEffect} from "react"
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Modal, Button } from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {MaterialIcons} from '@expo/vector-icons'
@@ -18,6 +18,14 @@ const AddUsersScreen = ({navigation, route }) => {
         }
         else alert('wtf')
     }
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <Button onPress={handleSubmit} title="Add" />
+          ),
+        });
+    }, [navigation])
+
     return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
@@ -28,39 +36,33 @@ const AddUsersScreen = ({navigation, route }) => {
         </TouchableOpacity>
         {count>0?
         <View style={{width:'100%', alignItems:'center'}}>
-       <View style={styles.card}>
-           <Text>You can add {count} member(s)</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setEmail}
-                value={email}
-                placeholder="Email"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={setPhone}
-                value={phone}
-                placeholder="Phone"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={setFirstName}
-                value={firstname}
-                placeholder="First Name"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={setLastName}
-                value={lastname}
-                placeholder="Last Name"
-            />
-
-        </View>
-        
-        <TouchableOpacity 
-            onPress={handleSubmit}>
-                <Text style={styles.link}>Add</Text>
-        </TouchableOpacity>
+            <View style={styles.card}>
+                <Text>You can add {count} member(s)</Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setEmail}
+                    value={email}
+                    placeholder="Email"
+                />
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setPhone}
+                    value={phone}
+                    placeholder="Phone"
+                />
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setFirstName}
+                    value={firstname}
+                    placeholder="First Name"
+                />
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setLastName}
+                    value={lastname}
+                    placeholder="Last Name"
+                />
+            </View>
         </View>:
         <View>
             <Text>You cannot add any more members.</Text>

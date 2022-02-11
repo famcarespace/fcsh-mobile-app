@@ -2,13 +2,17 @@ import React from "react"
 import { Button } from "react-native"
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 
+const convertToDate = (value) => {
+    var d = new Date()
+    d.setHours(value.slice(0,2))
+    d.setMinutes(value.slice(3))
+    return d
+}
+
 const TimeSelectorScreen = ({ navigation, route }) => {
     const { value, prevScreen, setting } = route.params
-    const [selected, setSelected] = React.useState(value)
+    const [selected, setSelected] = React.useState(convertToDate(value))
 
-    const handleChange = (val, idx) => {
-        setSelected(val)
-    }
     return(
         <>
             <RNDateTimePicker
@@ -18,8 +22,7 @@ const TimeSelectorScreen = ({ navigation, route }) => {
               is24Hour={true}
               display='spinner'
               onChange={(event, newTime)=> {
-                let selected = new Date(newTime) || from
-                setShow(Platform.OS === 'ios')
+                let selected = new Date(newTime) || selected
                 setSelected(selected)
               }}/>
             <Button
@@ -27,7 +30,7 @@ const TimeSelectorScreen = ({ navigation, route }) => {
                 onPress={()=>{
                     navigation.navigate({
                         name:prevScreen,
-                        params: {selected: selected,
+                        params: {selectedTime: selected.toTimeString(),
                         setting:setting},
                         merge:true
                     })

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
       borderColor:"#e1e5eb",
       borderRadius:2,
       color:"#495057",
-      width:'80%'
+      width:'100%'
     },
     hr:{
       borderBottomColor: "#e1e5eb",

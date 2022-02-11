@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Button } from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
@@ -8,10 +8,17 @@ const DeviceSettingsScreen = ({navigation, route }) => {
     const {device} = route.params
     const [location, setLocation]=React.useState(device.loc)
 
-    const submitLocation = () => {
+    const handleSubmit = () => {
         if(location.length>0)
             alert(`Location updated to ${location}`)
     }
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <Button onPress={handleSubmit} title="Save" />
+          ),
+        });
+      }, [navigation])
     return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
@@ -33,10 +40,6 @@ const DeviceSettingsScreen = ({navigation, route }) => {
                 placeholder="Device Location"
             />
         </View>
-        <TouchableOpacity style={[styles.button,styles.marginBottom, {marginTop:-20}]} 
-            onPress={submitLocation}>
-                <Text style={styles.buttonText}>Update</Text>
-        </TouchableOpacity>
         <View>
             {device.customAlerts && <TouchableOpacity
                 onPress={()=> navigation.navigate({

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react"
-import { View, Text, TouchableOpacity, Modal,
-  TextInput, Dimensions, Image} from "react-native"
+import React, {useEffect, useState, useLayoutEffect} from "react"
+import { View, Text, TouchableOpacity, Modal, Button,
+  TextInput, Dimensions, Image, ScrollView} from "react-native"
 import {AntDesign} from '@expo/vector-icons'
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
@@ -30,15 +30,31 @@ const NewPostScreen = ({ navigation, route }) => {
         setSelectedMedia(route.params.selected)
     },[route.params?.selected])
 
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <Button onPress={handleSubmit} title="Post" />
+        ),
+      });
+    }, [navigation])
 
     return (
       <View style={styles.mainContentContainer}>
+        <ScrollView>
         <View style={styles.innerContainer}>
-        <TouchableOpacity style={[styles.marginBottom, styles.row]}
-        onPress={()=> setModalOpen(!modalOpen)}>
-          <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
-          <Text> Who can post?</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={[styles.marginBottom, styles.row]}
+          onPress={()=> setModalOpen(!modalOpen)}>
+            <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
+            <Text> Who can post?</Text>
+          </TouchableOpacity>
+          <View style={styles.card}>
+            <Text style={styles.h4}>Caption</Text>
+            <TextInput                 
+            style={styles.input}
+            onChangeText={setStatusText}
+            value={statusText}
+            placeholder="Say something..."/>
+          </View>
           <View style={styles.card}>
             <View style={styles.row}>
               <Text style={[styles.h4,{flex:1}]}>Media</Text>
@@ -64,19 +80,8 @@ const NewPostScreen = ({ navigation, route }) => {
               ))}
             </View>
           </View>
-          <View style={styles.card}>
-            <Text style={styles.h4}>Caption</Text>
-            <TextInput                 
-            style={styles.input}
-            onChangeText={setStatusText}
-            value={statusText}
-            placeholder="Say something..."/>
-          </View>
-          <TouchableOpacity 
-            onPress={handleSubmit}>
-                    <Text style={styles.link}>Post</Text>
-            </TouchableOpacity>
         </View>
+        </ScrollView>
         <Subscribe navigation = {navigation}/>
         <Modal
         animationType="fade"

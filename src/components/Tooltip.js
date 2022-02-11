@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
         width:width/2,
         borderRadius:2,
         elevation:3,
-        zIndex:999,
+        zIndex:1,
     },
     tooltipText: {
-        fontSize:10,
+        fontSize:12,
     },
     tooltipIcon:{
         marginLeft:1

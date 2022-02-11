@@ -8,6 +8,7 @@ import DeviceHistoryScreen from '../screens/Sensors/DeviceHistory';
 import AddNewAlertScreen from '../screens/Sensors/AddNewAlert'
 import SelectorScreen from '../screens/Common/Selector';
 import CheckboxScreen from '../screens/Common/Checkbox';
+import TimeSelectorScreen from '../screens/Common/TimeSelector';
 import SmartBulbScreen from '../screens/Sensors/SmartBulb'
 import SmartSwitchScreen from '../screens/Sensors/SmartSwitch'
 import ActivityStreamScreen from '../screens/Activity/ActvityStream'
@@ -38,7 +39,8 @@ export const HomeStackNavigator= ()=>{
                     })}/>
                 <Stack.Screen name='Selector' component={SelectorScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='Checkbox' component={CheckboxScreen} options={{headerShown:false}}/>
-                <Stack.Screen name='Smart Bulb' component={SmartBulbScreen}
+                <Stack.Screen name='TimeSelector' component={TimeSelectorScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Smart Bulb' component={SmartBulbScreen} 
                     options={( {route} ) => ({
                         title: route.params.screenTitle
                     })}/>
@@ -58,7 +60,7 @@ export const ActivityStackNavigator = () => {
 
 export const NewPostStackNavigator = () => (
     <Stack.Navigator>
-        <Stack.Screen name='New Post' component={NewPostScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='New Post' component={NewPostScreen}/>
         <Stack.Screen name='Camera' component={CameraScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Album' component={ImageGalleryScreen}/>
     </Stack.Navigator>

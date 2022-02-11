@@ -1,6 +1,6 @@
-import React,{useState} from "react"
+import React,{useState, useLayout, useLayoutEffect} from "react"
 import { View, Text, Dimensions, 
-  SafeAreaView,FlatList, 
+  SafeAreaView,FlatList,
   Button, Pressable, TouchableOpacity,
 Modal} from "react-native"
 import styles from "../../../assets/styles"
@@ -12,6 +12,20 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
     const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
     const width = Dimensions.get('window').width
     const [modalOpen, setModalOpen] = useState(false)
+
+    useLayoutEffect(()=>{
+      navigation.setOptions({
+        headerRight:()=>
+          <Button onPress={()=> navigation.navigate({
+            name: 'New Alert',
+            params: {deviceId: deviceId,
+                      label: label,
+                      opts: statusOpts,
+                      newAlert:true,
+                    rule:null}
+            })} title='+'/>
+        })
+    },[navigation])
 
     const renderItem = ({item}) => (
       <Pressable
@@ -64,17 +78,6 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
           :
           <Text>No alerts</Text>
         }
-        <Button style={styles.button}
-        title='Set New Alert'
-        onPress={()=> navigation.navigate({
-          name: 'New Alert',
-          params: {deviceId: deviceId,
-                    label: label,
-                    opts: statusOpts,
-                    newAlert:true,
-                  rule:null}
-          })
-        }/>
       </View>
       <Subscribe navigation={navigation}/>
       <Modal

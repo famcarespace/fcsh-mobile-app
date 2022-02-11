@@ -37,13 +37,15 @@ const SettingsScreen = ({ navigation, route }) => {
               Gateway
               <Tooltip msg={`Gateway is a communication bridge between the app and physical devices.`}/>
             </Text>
-            <Text style={styles.textMuted}>
-              30:ae:7b:f1:e3:65
-            </Text>
-            <Text>
-              <Text style={styles.textMuted}>IP: </Text>
-              http://192.168.0.112
-            </Text> 
+            <View style={{zIndex:-1}}>
+              <Text style={styles.textMuted}>
+                30:ae:7b:f1:e3:65
+              </Text>
+              <Text>
+                <Text style={styles.textMuted}>IP: </Text>
+                http://192.168.0.112
+              </Text> 
+            </View>
           </View>
         </View>
         {/***** Timezone ****/}
@@ -52,7 +54,7 @@ const SettingsScreen = ({ navigation, route }) => {
             Timezone
             <Tooltip msg='select timezone of the location where sensors are placed.'/>
           </Text>
-          <View style={[styles.row, styles.pushRight]}>
+          <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
             <Text>{timezone}</Text>
             <TouchableOpacity
               onPress={()=> navigation.navigate({

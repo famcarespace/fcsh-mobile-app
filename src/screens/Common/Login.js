@@ -14,14 +14,16 @@ const LoginScreen = ({navigation,route}) => {
                 <Image source={logo} style={{width:180,
                                         height:70,
                                         resizeMode:"contain"}}/>
-                <TextInput style={styles.input}
-                    onChangeText = {setUsername}
-                    value={username}
-                    placeholder = 'Username/email'/>
-                <TextInput style={styles.input}
-                    onChangeText = {setPassword}
-                    value={password}
-                    placeholder = 'Password'/>
+                <View style={{width:'80%'}}>
+                    <TextInput style={styles.input}
+                        onChangeText = {setUsername}
+                        value={username}
+                        placeholder = 'Username/email'/>
+                    <TextInput style={styles.input}
+                        onChangeText = {setPassword}
+                        value={password}
+                        placeholder = 'Password'/>
+                </View>
                 <TouchableOpacity
                     style={styles.marginBottom}
                     onPress={()=>handleSubmit}>
@@ -32,8 +34,8 @@ const LoginScreen = ({navigation,route}) => {
                     onPress={()=>navigation.navigate({
                         name:'Enter app'
                     })}>
-                        <Text style={styles.buttonText}>Not a registered user?</Text>
-                        <Text style={styles.buttonText}>Tap to browse the app as guest user</Text>
+                        <Text style={{color:"#fff",textAlign:"center"}}>Not a registered user?</Text>
+                        <Text style={{color:"#fff",textAlign:"center"}}>Tap to browse the app as guest user</Text>
                 </TouchableOpacity>
             </View>
 

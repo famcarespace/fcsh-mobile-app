@@ -12,7 +12,7 @@ import {sensors} from '../../utils/device-data'
 const GroupedStatus = ({ navigation, route }) =>{
 
   const { type } = route.params
-  const width = Dimensions.get('window').width-60
+  const width = Dimensions.get('window').width
   
   const devices = sensors.filter(item=> item.cat===type)
   var redirectScreen=''

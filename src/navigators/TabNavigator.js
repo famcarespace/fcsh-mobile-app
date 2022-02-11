@@ -2,6 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import ApprovePostsScreen from '../screens/Activity/ApprovePosts'
 import {MaterialIcons} from '@expo/vector-icons'
+import DeviceSettingsScreen from '../screens/Sensors/DeviceSettings'
 import DeviceAlertingRulesScreen from '../screens/Sensors/DeviceAlertingRules'
 import DeviceHistoryScreen from '../screens/Sensors/DeviceHistory'
 import { ActivityStackNavigator, NewPostStackNavigator } from './StackNavigator'
@@ -49,7 +50,8 @@ export const DeviceSettingsTabNavigator = () => {
       tabBarActiveTintColor: 'dodgerblue',
       tabBarInactiveTintColor: 'gray',
     })}>
-      <Tab.Screen name='Alerts' component={DeviceAlertingRulesScreen} options={{headerShown:false}}/>
+      <Tab.Screen name='D Settings' component={DeviceSettingsScreen}/>
+      <Tab.Screen name='Alerts' component={DeviceAlertingRulesScreen}/>
       <Tab.Screen name='History' component={DeviceHistoryScreen} options={{headerShown:false}}/>
   </Tab.Navigator> 
 
