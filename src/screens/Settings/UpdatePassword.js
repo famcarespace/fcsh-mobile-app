@@ -1,5 +1,5 @@
-import React,{useState} from "react"
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from "react-native"
+import React,{useState, useLayoutEffect} from "react"
+import { View, SafeAreaView, TextInput, Button } from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 
@@ -8,9 +8,18 @@ const UpdatePasswordScreen = ({navigation, route }) => {
     const [newPass, setNewPass] = useState('')
     const [retype, setRetype] = useState('')
 
-    const submitLocation = () => {
-        if(old.length>0 && newPass.length>0 && retype.length>0)
-            alert('Password Updated')
+    useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <Button onPress={handleSubmit} title="Update" />
+          ),
+        });
+    }, [navigation, handleSubmit,old,newPass,retype])
+
+    const handleSubmit = () => {
+        if(old==='' || newPass===''||retype==='')
+            alert('all fields are required')
+        else  alert('Password Updated')
     }
     return (
     <SafeAreaView style={styles.mainContentContainer}>
@@ -35,11 +44,6 @@ const UpdatePasswordScreen = ({navigation, route }) => {
                 placeholder="Retype new password"
             />
         </View>
-        
-        <TouchableOpacity 
-            onPress={submitLocation}>
-                <Text style={styles.link}>Update</Text>
-        </TouchableOpacity>
     </View>
     <Subscribe navigation={navigation}/>
     </SafeAreaView>

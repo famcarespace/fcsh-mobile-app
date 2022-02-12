@@ -23,7 +23,7 @@ const Subscribe = ({ navigation }) => {
             <MaterialIcons name='cancel' color='tomato' size={20}/>
           </Pressable>
         <Text>
-          This is sample data. To unleash the full power of Family Portal, visit 
+          This is sample data. To unleash full power of the Family Home Portal, visit 
           <Pressable 
             onPress={handlePressureButtonAsync}>
               <Text style={{color:'dodgerblue'}}> familycarespacestore</Text> 

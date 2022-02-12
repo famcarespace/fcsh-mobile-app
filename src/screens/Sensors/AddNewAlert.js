@@ -54,7 +54,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
         <Button onPress={handleSubmit} title="Save" />
       ),
     });
-  }, [navigation])
+  }, [navigation, handleSubmit,from,to,status,days,timer,hrs,mins])
 
   const handleSubmit = () => {
     const newRule = {
@@ -76,14 +76,14 @@ const AddNewAlertScreen = ({ navigation, route }) => {
       <ScrollView>
         <View style={styles.innerContainer}>
         <Text style={[styles.marginBottom,{paddingHorizontal:20}]}>
-          Ex: Alert me if a motion sensor in garage detects movement late at night
+          Example: Alert me if a motion sensor in garage detects movement late at night
         </Text>
         <View style={[styles.card]}>
           {/****** START TIME ******/}
           <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
             <Text style={[styles.textMuted,{flex:1}]}>
               Start Time
-              <Tooltip msg='Start time and end time are used to set an interval for observing this sensor'/>
+              <Tooltip msg='Set a timeframe to check for alerts'/>
             </Text>
             <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
                 <Text>{from} hrs</Text>

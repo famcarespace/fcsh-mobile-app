@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Modal, Button } 
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {MaterialIcons} from '@expo/vector-icons'
+import * as WebBrowser from 'expo-web-browser'
 
 const AddUsersScreen = ({navigation, route }) => {
     const [count, setCount] = useState(2)
@@ -11,20 +12,29 @@ const AddUsersScreen = ({navigation, route }) => {
     const [firstname, setFirstName] = useState('')
     const [lastname, setLastName] = useState('')
     const [modalOpen, setModalOpen] = useState(false)
+    const [result, setResult] = React.useState(null)
 
     const handleSubmit = () => {
-        if(email.length>0 && phone.length>0 && firstname.length>0 && lastname.length>0){
-            setCount(count-1)
+        if(email==='' || phone===''||firstname==='' || lastname===''){
+            alert('incomplete details')
         }
-        else alert('wtf')
+        else setCount(count-1)
     }
-    React.useLayoutEffect(() => {
+
+    useLayoutEffect(() => {
         navigation.setOptions({
           headerRight: () => (
             <Button onPress={handleSubmit} title="Add" />
           ),
         });
-    }, [navigation])
+    }, [navigation, handleSubmit,count,email,phone,firstname,lastname])
+
+    const handlePressureButtonAsync = async()=> {
+      let result = await WebBrowser.openBrowserAsync(
+        'https://familycarespacestore.com/product/family-portal'
+      )
+      setResult(result)
+    }
 
     return (
     <SafeAreaView style={styles.mainContentContainer}>
@@ -83,10 +93,13 @@ const AddUsersScreen = ({navigation, route }) => {
               One of the group members takes the role of family admin and can add new friends and family members to the portal.
             </Text>
             <Text style={styles.marginBottom}>
-                To do this, family admin needs to buy user accounts from Family CareSpace e-store.
+                To do this, family admin needs to buy user accounts from  <TouchableOpacity 
+            onPress={handlePressureButtonAsync}>
+              <Text style={{color:'dodgerblue'}}> familycarespacestore.com</Text> 
+          </TouchableOpacity>
             </Text>
             <Text style={styles.marginBottom}>
-                Ex: If family admin buys 3 user accounts, he/she gets the option to add 3 members from this screen.
+                Example: If family admin buys 2 user accounts, they get the option to add 2 members from this screen.
             </Text>
           </View>
           <TouchableOpacity

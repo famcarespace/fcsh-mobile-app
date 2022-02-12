@@ -60,8 +60,7 @@ const styles = StyleSheet.create({
     cardHeader:{
       fontSize:16,
       fontWeight:"500",
-      borderBottomColor:"lightgray",
-      borderBottomWidth:2,
+
       marginBottom:10
     },
     imgIcon:{

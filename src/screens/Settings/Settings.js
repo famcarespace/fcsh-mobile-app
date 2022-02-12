@@ -5,6 +5,7 @@ import gateway from '../../../assets/images/gateway.png'
 import styles from "../../../assets/styles"
 import {MaterialIcons} from '@expo/vector-icons'
 import Tooltip from "../../components/Tooltip"
+import * as WebBrowser from 'expo-web-browser'
 
 const SettingsScreen = ({ navigation, route }) => {
     const [timezone, setTimezone] = useState('US/Eastern (GMT-4)')
@@ -15,6 +16,7 @@ const SettingsScreen = ({ navigation, route }) => {
     'US/Alaska(GMT-8)',
     'US/Hawaii(GMT-10)',
     'GMT+0']
+    const [result, setResult] = React.useState(null)
 
     useEffect(()=>{
       if(route.params?.selected){
@@ -24,6 +26,13 @@ const SettingsScreen = ({ navigation, route }) => {
       }
 
     },[route.params?.selected])
+
+    const handlePressureButtonAsync = async()=> {
+      let result = await WebBrowser.openBrowserAsync(
+        'http://192.168.0.112'
+      )
+      setResult(result)
+    }
 
     return (
       <SafeAreaView style={styles.mainContentContainer}>
@@ -41,10 +50,12 @@ const SettingsScreen = ({ navigation, route }) => {
               <Text style={styles.textMuted}>
                 30:ae:7b:f1:e3:65
               </Text>
-              <Text>
+              <View>
                 <Text style={styles.textMuted}>IP: </Text>
-                http://192.168.0.112
-              </Text> 
+                <TouchableOpacity onPress={handlePressureButtonAsync}>
+                  <Text style={{color:'dodgerblue'}}>http://192.168.0.112</Text>
+                </TouchableOpacity>
+              </View> 
             </View>
           </View>
         </View>
@@ -71,7 +82,7 @@ const SettingsScreen = ({ navigation, route }) => {
         {/***** SMS ****/}
         <View style={[styles.card, styles.row,{alignItems:'center'}]}>
           <Text style={[styles.textMuted,{flex:1}]}>
-            SMS Notification
+            Text Notifications
           </Text>
           <View style={[styles.row, styles.pushRight]}>
             <Text>{sms}</Text>

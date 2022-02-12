@@ -15,7 +15,7 @@ const NewPostScreen = ({ navigation, route }) => {
 
     const handleSubmit = () => {
       if(statusText || selectedMedia.length>0)
-      alert('Post sent for approval to Family Admin')
+        alert('Post sent for approval to Family Admin')
       setSelectedMedia([])
       setStatusText('')
     }
@@ -36,7 +36,7 @@ const NewPostScreen = ({ navigation, route }) => {
           <Button onPress={handleSubmit} title="Post" />
         ),
       });
-    }, [navigation])
+    }, [navigation, handleSubmit, statusText,selectedMedia])
 
     return (
       <View style={styles.mainContentContainer}>
@@ -95,7 +95,7 @@ const NewPostScreen = ({ navigation, route }) => {
           <View style={styles.card}>
             <Text style={styles.marginBottom}>
               Posts can be made by care providers from care agency, administrators from care agency, or family members. 
-              One of the family members takes the role of family admin and is reponsible for approving new content.
+              One of the family members takes the role of family admin and is reponsible for approving new content for other members to see.
             </Text>
           </View>
           <TouchableOpacity

@@ -15,10 +15,11 @@ const DeviceSettingsScreen = ({navigation, route }) => {
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerRight: () => (
-            <Button onPress={handleSubmit} title="Save" />
+            <Button
+            onPress={handleSubmit} title="Save" />
           ),
         });
-      }, [navigation])
+      }, [navigation, handleSubmit])
     return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
