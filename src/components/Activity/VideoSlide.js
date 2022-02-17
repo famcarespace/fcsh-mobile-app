@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Dimensions, Button } from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av'
+import { Dimensions } from 'react-native';
+import { Video } from 'expo-av'
 
 
 const VideoSlide = ({src, index}) => {

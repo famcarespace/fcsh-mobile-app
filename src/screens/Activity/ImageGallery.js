@@ -1,5 +1,5 @@
-import React, {useState} from "react"
-import { View, Text, TouchableOpacity, TextInput, Button } from "react-native"
+import React from "react"
+import { View, Button } from "react-native"
 import styles from "../../../assets/styles"
 import ImageBrowser from "../../components/MultiImagePicker/ImageBrowser"
 

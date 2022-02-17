@@ -13,6 +13,7 @@ const DrawerNavigator = () => {
             <Drawer.Screen name='Alerts' component={AllAlertingRulesScreen}/>
             <Drawer.Screen name='Posts' component={ActivityTabNavigator}/>
             <Drawer.Screen name='Settings' component={SettingsStackNavigator}/>
+            <Drawer.Screen name='Logout' component={SettingsStackNavigator}/>
         </Drawer.Navigator>
     )
 }

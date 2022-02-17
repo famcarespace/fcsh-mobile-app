@@ -1,8 +1,7 @@
 import React,{useState} from "react"
-import { View, Text, Button, SafeAreaView, TouchableOpacity, SliderBase } from "react-native"
+import { View, Text, Button, SafeAreaView, TouchableOpacity } from "react-native"
 import styles from "../../../assets/styles"
 import {MaterialIcons} from '@expo/vector-icons'
-import Slider from '@react-native-community/slider'
 
 const SmartSwitchScreen = ({navigation, route }) => {
     const {device} = route.params

@@ -8,7 +8,7 @@ export const posts = [
     {
         StatusID:1,
         media: [{type:'video', src: expVid}],
-        StatusText:'Hi! Do you want to posts like this from your care agency? Subscribe the App now',
+        StatusText:'Hi! Do you want to see posts like this from your care agency? Subscribe to the App now.',
         CreatedOn: new Date().toString(),
         UserName:'Jane Doe',
         UserPic: avatar1,
@@ -20,7 +20,7 @@ export const posts = [
         media: [{type:'image', src:media1}, 
         {type:'image', src:media2}, 
         {type:'image', src:media3},],
-        StatusText:'Sharing photos and videos keeps loved ones connected. A video proof of visits and care provided gives families peace of mind',
+        StatusText:'Sharing photos and videos keep loved ones connected. A video proof of visits and care provided give families peace of mind.',
         CreatedOn: new Date().toString(),
         UserName:'Jane Doe',
         UserPic: avatar1,
@@ -34,7 +34,7 @@ export const posts = [
             {
                 Id:2,
                 UserName:'John Doe',
-                CommentText:'At 11:00am. I was with her for two hours'
+                CommentText:'At 11:00am. I was with her for two hours.'
             }
         ]
     }

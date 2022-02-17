@@ -62,6 +62,7 @@ export class MediaSlider extends Component {
             sliderWidth={width}
             loopClonesPerSide={5}
             renderItem={this._renderItem}
+            onSnapToItem = {(index)=> this.onSnap(index)}
             />
             <Pagination
                 borderRadius={2}

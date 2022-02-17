@@ -93,9 +93,9 @@ const NewPostScreen = ({ navigation, route }) => {
         }}>
         <View style={styles.centered}>
           <View style={styles.card}>
-            <Text style={styles.marginBottom}>
-              Posts can be made by care providers from care agency, administrators from care agency, or family members. 
-              One of the family members takes the role of family admin and is reponsible for approving new content for other members to see.
+            <Text style={styles.marginBottom}> 
+              One of the family members takes the role of family admin and is reponsible for approving new users and new content.
+              Posts can be made by users authorized by the family admin, such as care staff, primary physician and friends.
             </Text>
           </View>
           <TouchableOpacity

@@ -35,7 +35,9 @@ const GroupedStatus = ({ navigation, route }) =>{
       screenTitle='Smart Switch'
   }
 
-  const renderItemSensor = ({item}) => (
+  const renderItemSensor = ({item}) => {
+    let lastMessage = parseInt(Math.random()*10)
+    return(
     <TouchableOpacity
         style={[styles.card, styles.row, {width:width}]}
         onPress={()=> navigation.navigate({
@@ -54,10 +56,13 @@ const GroupedStatus = ({ navigation, route }) =>{
         :
         <Text style={styles.textRight}>{item.status}</Text>
         }
-        <Text style={styles.textRight}>1 min ago</Text>
+        <Text style={styles.textRight}>
+          {lastMessage===0?'now':`${lastMessage} mins ago`}
+        </Text>
       </View>
     </TouchableOpacity>
-  )
+    )
+  }
 
   return (
     <SafeAreaView style={styles.mainContentContainer}>

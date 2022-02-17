@@ -29,14 +29,6 @@ const LoginScreen = ({navigation,route}) => {
                     onPress={()=>handleSubmit}>
                         <Text style={styles.link}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.button, styles.pushBottom]}
-                    onPress={()=>navigation.navigate({
-                        name:'Enter app'
-                    })}>
-                        <Text style={{color:"#fff",textAlign:"center"}}>Not a registered user?</Text>
-                        <Text style={{color:"#fff",textAlign:"center"}}>Tap to browse the app as guest user</Text>
-                </TouchableOpacity>
             </View>
 
         </SafeAreaView>

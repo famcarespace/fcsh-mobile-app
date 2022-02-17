@@ -33,6 +33,7 @@ const DashboardScreen = ({ navigation, route }) =>{
   return (
     <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
+      <Text style={styles.marginBottom}>List of sensors for the demonstration home.</Text>
         <FlatList data={overview}
         renderItem={renderItem}
         keyExtractor={item => item.id}

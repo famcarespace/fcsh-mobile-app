@@ -14,13 +14,15 @@ import SmartSwitchScreen from '../screens/Sensors/SmartSwitch'
 import ActivityStreamScreen from '../screens/Activity/ActvityStream'
 import CommentsScreen from '../screens/Activity/Comments';
 import NewPostScreen from '../screens/Activity/NewPost';
-import CameraScreen from '../screens/Activity/CameraScreen';
 import UserInfoScreen from '../screens/Settings/UserInfo';
 import SettingsScreen from '../screens/Settings/Settings';
 import UpdatePasswordScreen from '../screens/Settings/UpdatePassword';
 import ImageGalleryScreen from '../screens/Activity/ImageGallery';
 import LoginScreen from '../screens/Common/Login';
 import AddUsersScreen from '../screens/Settings/AddUsers';
+import DrawerNavigator from './DrawerNavigator';
+import LandingScreen from '../screens/Common/LandingScreen';
+import RedirectScreen from '../screens/Common/Redirect';
 
 const Stack = createNativeStackNavigator()
 
@@ -61,7 +63,6 @@ export const ActivityStackNavigator = () => {
 export const NewPostStackNavigator = () => (
     <Stack.Navigator>
         <Stack.Screen name='New Post' component={NewPostScreen}/>
-        <Stack.Screen name='Camera' component={CameraScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Album' component={ImageGalleryScreen}/>
     </Stack.Navigator>
 )
@@ -76,8 +77,11 @@ export const SettingsStackNavigator = () => (
     </Stack.Navigator>
 )
 
-export const AuthStackNavigator = () => {
+export const AuthStackNavigator = () => (
     <Stack.Navigator>
-        <Stack.Screen name='Login' compoenent={LoginScreen} options={{headerShown:false}}/>
+         <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
+         <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Login' component={LoginScreen} options={{headerShown:false}}/>
+       <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
     </Stack.Navigator>
-}
+)

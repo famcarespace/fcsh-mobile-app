@@ -90,7 +90,7 @@ const AddUsersScreen = ({navigation, route }) => {
         <View style={styles.centered}>
           <View style={styles.card}>
             <Text style={styles.marginBottom}>
-              One of the group members takes the role of family admin and can add new friends and family members to the portal.
+              One of the group members takes the role of family admin and can add new members to the portal.
             </Text>
             <Text style={styles.marginBottom}>
                 To do this, family admin needs to buy user accounts from  <TouchableOpacity 

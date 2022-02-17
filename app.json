@@ -1,11 +1,13 @@
 {
   "expo": {
-    "name": "HomecareProvider",
-    "slug": "HomecareProvider",
+    "name": "Family Home Portal",
+    "slug": "Family-home-portal",
     "owner": "vrindakansal",
     "version": "1.0.0",
+    "runtimeVersion":"1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "primaryColor":"#ffffff",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,13 +20,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.familycarespace.familyhomeportal",
+      "buildNumber":"1.0.0",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app uses the gallery to upload photos to Activity Stream on user demand."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package":"com.familycarespace.familyhomeportal",
+      "versionCode":1
     },
     "web": {
       "favicon": "./assets/favicon.png"

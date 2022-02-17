@@ -4,7 +4,7 @@ import styles from "../../assets/styles"
 import * as WebBrowser from 'expo-web-browser'
 import {MaterialIcons} from '@expo/vector-icons'
 
-const Subscribe = ({ navigation }) => {
+const Subscribe = () => {
     const [result, setResult] = React.useState(null)
     const [visible, setVisible] = React.useState(true)
 
@@ -23,7 +23,7 @@ const Subscribe = ({ navigation }) => {
             <MaterialIcons name='cancel' color='tomato' size={20}/>
           </Pressable>
         <Text>
-          This is sample data. To unleash full power of the Family Home Portal, visit 
+          This is sample data. To unleash the full power of the Family Home Portal, visit 
           <Pressable 
             onPress={handlePressureButtonAsync}>
               <Text style={{color:'dodgerblue'}}> familycarespacestore</Text> 
