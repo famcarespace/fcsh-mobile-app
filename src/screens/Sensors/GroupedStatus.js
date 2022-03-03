@@ -1,42 +1,66 @@
-import React from "react"
+import React,{useState, useEffect} from "react"
 import {Text,
 TouchableOpacity,
 SafeAreaView,
-FlatList, 
+FlatList, ActivityIndicator,
 Dimensions,
 View} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {sensors} from '../../utils/device-data'
+import {useSelector, useDispatch} from 'react-redux'
+import { GET_DEVICE_LIST } from "../../redux/types"
+import axios from 'axios'
+import { convertToMins } from "../../utils/time-formatting"
 
 const GroupedStatus = ({ navigation, route }) =>{
-
   const { type } = route.params
   const width = Dimensions.get('window').width
+  const dispatch = useDispatch()
+  const {deviceList, authenticated} = useSelector(state=>state)
+  const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState('')
   
   const devices = sensors.filter(item=> item.cat===type)
   var redirectScreen=''
   var screenTitle=''
   switch (type){
-    case 'sensor':
+    case 'Sensor':
       redirectScreen='Device Settings'
       screenTitle='Settings'
       break;
-    case 'bulb':
+    case 'Smart Bulb':
       redirectScreen='Smart Bulb'
       screenTitle='Smart Bulb'
       break;
-    case 'plug':
+    case 'Smart Plug':
       redirectScreen='Smart Bulb'
       screenTitle='Smart Plug'
       break;
-    case 'switch':
+    case 'Smart Switch':
       redirectScreen='Smart Switch'
       screenTitle='Smart Switch'
   }
 
+  useEffect(() => {
+    axios
+    .get(`/device-list-by-type?cat=${type}`)
+    .then(res=>{
+        setErrors('')
+        dispatch({
+            type:GET_DEVICE_LIST,
+            payload:res.data
+        })
+        setLoading(false)
+    })
+    .catch(err=>{
+        console.log(err)
+        setLoading(false)
+        setErrors('Unable to get data. Please refresh')
+    })
+  }, [type, dispatch])
+
   const renderItemSensor = ({item}) => {
-    let lastMessage = parseInt(Math.random()*10)
     return(
     <TouchableOpacity
         style={[styles.card, styles.row, {width:width}]}
@@ -47,17 +71,17 @@ const GroupedStatus = ({ navigation, route }) =>{
         })}
       >   
       <View style={{flex:1}}>
-        <Text>{item.type}</Text>
-        <Text style={styles.textMuted}>{item.loc}</Text>
+        <Text>{item.Name}</Text>
+        <Text style={styles.textMuted}>{item.Location}</Text>
       </View> 
       <View style={{flex:1}}>
-        {item.cat ==='switch'?
-        <Text style={styles.textRight}>{item.ss1+' | '+item.ss2+' | '+item.ss3}</Text>
+        {item.Name ==='SmartSwitch 3'?
+        <Text style={styles.textRight}>{item.SS1+' | '+item.SS2+' | '+item.SS3}</Text>
         :
-        <Text style={styles.textRight}>{item.status}</Text>
+        <Text style={styles.textRight}>{item.Conversion}</Text>
         }
         <Text style={styles.textRight}>
-          {lastMessage===0?'now':`${lastMessage} mins ago`}
+          {convertToMins(item.lastMessageTime)}
         </Text>
       </View>
     </TouchableOpacity>
@@ -67,13 +91,18 @@ const GroupedStatus = ({ navigation, route }) =>{
   return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
-      <FlatList data={devices}
-      renderItem={renderItemSensor}
-      keyExtractor={item => item.id}
-      extraData={navigation}
-      />
+      {loading? 
+        <ActivityIndicator/>:
+        deviceList.length===0?
+          <Text>No devices yet</Text>:
+          <FlatList data={authenticated? deviceList: devices}
+          renderItem={renderItemSensor}
+          keyExtractor={item => item.DeviceId}
+          extraData={navigation}
+          />
+      }
     </View>
-    <Subscribe navigation={navigation}/>
+    {!authenticated && <Subscribe navigation={navigation}/>}
     </SafeAreaView>
   )
 }

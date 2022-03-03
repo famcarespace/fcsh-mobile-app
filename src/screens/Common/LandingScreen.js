@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Carousel, {Pagination} from 'react-native-snap-carousel'
 //https://github.com/intellidev1991/react-native-image-slider-box/blob/master/dist/SliderBox.js
 import { View, Dimensions, Image, Text, SafeAreaView} from "react-native"
 import styles from "../../../assets/styles"
@@ -40,7 +40,7 @@ Pre-empt unwanted situations from occurring.`,
                 src: screen3,
                 caption:`Easily add more users such as care providers, primary physicians, friends and family.\n
 Easily bring everyone together on the same page.\n
-The ultimate platform designed for seniors ageing in place at home.`,
+The ultimate platform designed for seniors aging in place at home.`,
             },
             {
                 id:4,
@@ -56,12 +56,13 @@ The ultimate platform designed for seniors ageing in place at home.`,
     }
     
     onSnap(index) {
-        this.setState({currentImage: index});
+
         if(index===3){
             this.props.navigation.navigate({
                 name:'Redirect'
             })
         }
+        else this.setState({currentImage: index});
     }
 
     _renderItem({item, index}) {

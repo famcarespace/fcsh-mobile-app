@@ -1,31 +1,56 @@
-import React from "react"
+import React,{useEffect, useState} from "react"
 import {Text, Image, Dimensions,
 TouchableOpacity,
-SafeAreaView,
+SafeAreaView, ActivityIndicator,
 FlatList, 
 View} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
-import {overview} from '../../utils/device-data'
+import {overview, getIcon } from '../../utils/device-data'
+import axios from 'axios'
+import { useSelector } from "react-redux"
 
 const DashboardScreen = ({ navigation, route }) =>{
 
   const width = Dimensions.get('window').width-60
+  const [errors,setErrors] = useState('')
+  const [homeOverview, setHomeOverview] = useState([])
+  const [loading, setLoading] = useState(true)
+  const {authenticated} = useSelector(state=> state)
+  
+  useEffect(()=>{
+    if(authenticated){
+      axios
+      .get('/device-list')
+      .then(res=>{
+          setErrors('')
+          setHomeOverview(res.data)
+          setLoading(false)
+      })
+      .catch(err=>{
+          console.log(err)
+          setErrors('Unable to get data. Reload the app')
+          setHomeOverview([])
+          setLoading(false)
+      })
+    }
+  },[])
+
   const renderItem = ({item}) => (
     <TouchableOpacity
         style={[styles.card, styles.row,{width:width}]}
         onPress={()=> navigation.navigate({
           name: 'Grouped Status',
-          params: { type: item.cat },
+          params: { type: item.Category },
         })}
       >
        {<Image style={styles.imgIcon}
-       source={item.icon}/>}
+       source={getIcon(item.Category)}/>}
        <View>
         <Text style={[styles.h2]}>
-          {item.count}
+          {item.DeviceCount}
         </Text>
-        <Text>{item.label}</Text> 
+        <Text>{item.Category}{item.DeviceCount>1?'s':''}</Text> 
        </View>
     </TouchableOpacity>
   )
@@ -33,14 +58,23 @@ const DashboardScreen = ({ navigation, route }) =>{
   return (
     <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
-      <Text style={styles.marginBottom}>List of sensors for the demonstration home.</Text>
-        <FlatList data={overview}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        extraData={navigation}
-        />
+        {!authenticated && 
+          <Text style={styles.marginBottom}>List of sensors for the demonstration home.</Text>
+        } 
+        {errors!=='' && 
+          <Text style={styles.marginBottom}>{errors}</Text>
+        } 
+        {loading?<ActivityIndicator/>:
+          <FlatList data={authenticated?homeOverview:overview} //homeOverview
+          renderItem={renderItem}
+          keyExtractor={item => homeOverview.indexOf(item)}
+          extraData={navigation}
+          />
+        }
       </View>
-      <Subscribe navigation={navigation}/>
+      {!authenticated && 
+        <Subscribe navigation={navigation}/>
+      }
     </SafeAreaView>
   )
 }

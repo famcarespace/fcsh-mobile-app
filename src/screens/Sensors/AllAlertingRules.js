@@ -1,18 +1,22 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import { View, Text, Dimensions, 
   SafeAreaView,FlatList, 
   Pressable, Modal, TouchableOpacity} from "react-native"
-
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {allAlerts} from "../../utils/device-data"
 import {MaterialIcons} from '@expo/vector-icons'
+//import axios from 'axios'
 
 const AllAlertingRulesScreen = ({ navigation, route }) => {
     const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
     const width = Dimensions.get('window').width
-    const [modalOpen, setModalOpen] = React.useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
+    const [allActiveAlerts, setAllActiveAlerts] = useState([])
 
+    useEffect(()=>{
+
+    })
     const renderItem = ({item}) => {
       return(
       <Pressable

@@ -79,9 +79,9 @@ export const SettingsStackNavigator = () => (
 
 export const AuthStackNavigator = () => (
     <Stack.Navigator>
-         <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
-         <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
-        <Stack.Screen name='Login' component={LoginScreen} options={{headerShown:false}}/>
-       <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
+        <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
+        <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
+        <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
     </Stack.Navigator>
 )

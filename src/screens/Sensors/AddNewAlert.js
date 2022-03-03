@@ -4,11 +4,10 @@ SafeAreaView, Switch,
 TouchableOpacity, Button,
 TextInput} from "react-native"
 import {MaterialIcons} from '@expo/vector-icons'
-
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
-
+//import axios from 'axios'
 
 
 const getCurrTime = () => {
@@ -25,6 +24,9 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
   const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
+
+  const [errors, setErrors] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(()=>{
     if(route.params?.selected){
@@ -57,19 +59,38 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   }, [navigation, handleSubmit,from,to,status,days,timer,hrs,mins])
 
   const handleSubmit = () => {
-    const newRule = {
-      from: from,
-      to: to,
-      status: status,
-      days:days,
-      timer:timer,
-      duration:{
-        hrs:hrs,
-        mins:mins
+    setLoading(true)
+    let complete = true
+    if(!days.includes('1')) complete = false
+    if(timer && (hrs==='00' && mins==='00')) complete = false
+    if(complete){
+      let newRule = {
+        from: from,
+        to: to,
+        status: status,
+        days:days,
+        timer:timer,
+        duration:{
+          hrs:hrs,
+          mins:mins
+        }
       }
-    }
-    if(newRule)
       alert('Alert Set')
+      /*
+      axios
+      .post(`/new-rule`,
+      {deviceId: deviceId, rule:newRule})
+      .then(res=>{
+          setErrors('')
+          setLoading(false)
+      })
+      .catch(err=>{
+          console.log(err)
+          setErrors(err)
+          setLoading(false)
+      })
+      */
+    }
   }
   return(
       <SafeAreaView style={styles.mainContentContainer}>
