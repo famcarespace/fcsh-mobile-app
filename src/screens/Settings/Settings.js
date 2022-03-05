@@ -10,6 +10,7 @@ import * as WebBrowser from 'expo-web-browser'
 import axios from 'axios'
 import {useSelector} from 'react-redux'
 import Subscribe from "../../components/Subscribe"
+import { guestUser } from "../../utils/device-data"
 
 const SettingsScreen = ({ navigation, route }) => {
     const [timezone, setTimezone] = useState('US/Eastern (GMT-4)')
@@ -28,34 +29,41 @@ const SettingsScreen = ({ navigation, route }) => {
 
     useEffect(()=>{
       if(route.params?.selected){
-        setLoading(true)
-        console.log(route.params.selected)
-        var newSettings={
-          timezone: timezone,
-          smsAlert: sms,
+        if(authenticated){
+          setLoading(true)
+          var newSettings={
+            timezone: timezone,
+            smsAlert: sms,
+          }
+          if(route.params.setting==='timezone')
+            newSettings.timezone = route.params.selected
+          else { 
+            newSettings.smsAlert = route.params.selected==='yes'?true:false
+          }
+          axios.put('/update-timezone',newSettings)
+          .then(res=>{
+            setTimezone(res.data.timezone)
+            setSms(res.data.smsAlert)
+            setLoading(false)
+            setErrors('')
+          })
+          .catch(err=>{
+            console.log(err)
+            setLoading(false)
+            setErrors('Unable to update. Try again.')
+          })
         }
-        if(route.params.setting==='timezone')
-          newSettings.timezone = route.params.selected
-        else { 
-          newSettings.smsAlert = route.params.selected
+        else {
+          if(route.params.setting==='timezone')
+            setTimezone(route.params.selected)
+          else setSms(route.params.selected)
         }
-        axios.put('/update-timezone',newSettings)
-        .then(res=>{
-          setTimezone(res.data.timezone)
-          setSms(res.data.smsAlert)
-          setLoading(false)
-          setErrors('')
-        })
-        .catch(err=>{
-          console.log(err)
-          setLoading(false)
-          setErrors('Unable to update. Try again.')
-        })
       }
     },[route.params?.selected])
 
     useEffect(()=>{
       if(authenticated){
+        setLoading(true)
         axios
         .get('/user')
         .then(res=>{ 
@@ -71,6 +79,10 @@ const SettingsScreen = ({ navigation, route }) => {
           setLoading(false)
         })
       }
+      else {
+        setCurrUser(guestUser)
+        setLoading(false)
+      }
     },[])
 
     const handlePressureButtonAsync = async()=> {
@@ -83,6 +95,10 @@ const SettingsScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
+        { errors!=='' && 
+          <Text style={{color:'tomato'}}>
+          {errors}</Text>
+        }
         {/***** Gateway Info ****/}
         <View style={[styles.card, styles.row]}>
           <Image style={styles.imgIcon}
@@ -122,7 +138,7 @@ const SettingsScreen = ({ navigation, route }) => {
                   prevScreen:'Settings Landing',
                   setting:'timezone'},
               })}>
-              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+              <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -132,17 +148,17 @@ const SettingsScreen = ({ navigation, route }) => {
             Text Notifications
           </Text>
           <View style={[styles.row, styles.pushRight]}>
-            <Text>{sms?'Yes':'No'}</Text>
+            <Text>{sms?'yes':'no'}</Text>
             <TouchableOpacity
               disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Zone Selector',
-                params: { value: sms,
+                params: { value: sms?'yes':'no',
                   options:['yes', 'no'],
                   prevScreen:'Settings Landing',
                   setting:'sms'},
               })}>
-              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+              <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -158,7 +174,7 @@ const SettingsScreen = ({ navigation, route }) => {
                 name: 'Userinfo',
                 params: {user: currUser}
               })}>
-              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+              <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -173,7 +189,7 @@ const SettingsScreen = ({ navigation, route }) => {
               onPress={()=> navigation.navigate({
                 name: 'Update Password',
               })}>
-              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+              <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -188,7 +204,7 @@ const SettingsScreen = ({ navigation, route }) => {
               onPress={()=> navigation.navigate({
                 name: 'Add Members',
               })}>
-              <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+              <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
             </TouchableOpacity>
           </View>
         </View>

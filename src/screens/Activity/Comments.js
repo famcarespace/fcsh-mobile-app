@@ -4,6 +4,7 @@ import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import { MEDIA_URL } from "../../redux/types"
 import axios from 'axios'
+import { useSelector } from "react-redux"
 
 const CommentsScreen = ({ navigation, route }) => {
     const {item} = route.params
@@ -11,49 +12,64 @@ const CommentsScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true)
     const [newComment, setNewComment] = React.useState('')
     const [errors, setErrors] = useState('')
+    const {authenticated} = useSelector(state=>state)
 
     useEffect(()=>{
         refreshFeed()
     },[])
 
     const refreshFeed = () =>{
-        setLoading(true)
-        axios.get(`/comments/${item.StatusID}`)
-        .then(res=>{
-            setComments(res.data)
+        if(authenticated){
+            setLoading(true)
+            axios.get(`/comments/${item.StatusID}`)
+            .then(res=>{
+                setComments(res.data)
+                setLoading(false)
+                setErrors('')
+            })
+            .catch(err=>{
+                console.log(err)
+                setLoading(false)
+                setErrors('Unable to get data. Try again.')
+            })
+        }
+        else {
+            setComments(item.Comments)
             setLoading(false)
-            setErrors('')
-        })
-        .catch(err=>{
-            console.log(err)
-            setLoading(false)
-            setErrors('Unable to get data. Try again.')
-        })
+        }
     }
 
     const handleSubmit = () => {
         if(newComment!==''){
-            setLoading(true)
-            axios
-            .post('/new-comment', {
-                postId: item.StatusID,
-                body: newComment
-                },
-            {
-              'Content-Type':'application/json',
-              'Content-Length':'<calculated when request is sent>'
-            })
-            .then(res=>{
-                refreshFeed()
-                setErrors('')
-                setNewComment('')
-            })
-            .catch(err=>{
-                console.log(err)
-                setErrors('Unable to process request. Try again.')
-                setLoading(false)
-            })
+            if(authenticated){
+                setLoading(true)
+                axios
+                .post('/new-comment', {
+                    postId: item.StatusID,
+                    body: newComment
+                    },
+                {
+                'Content-Type':'application/json',
+                'Content-Length':'<calculated when request is sent>'
+                })
+                .then(res=>{
+                    refreshFeed()
+                    setErrors('')
+                })
+                .catch(err=>{
+                    console.log(err)
+                    setErrors('Unable to process request. Try again.')
+                    setLoading(false)
+                })
+            }
+            else setComments([...comments, {
+                FirstName:'Guest',
+                LastName:'User',
+                CommentText:newComment,
+                CommentId:40
+            }])
         }
+        setNewComment('')
     }
 
     const renderItem= ({item}) => (

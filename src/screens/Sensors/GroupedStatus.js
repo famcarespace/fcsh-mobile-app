@@ -64,7 +64,8 @@ const GroupedStatus = ({ navigation, route }) =>{
       dispatch({
         type:GET_DEVICE_LIST,
         payload:devices
-    })
+      })
+      setLoading(false)
     }
 
   }, [type, dispatch])

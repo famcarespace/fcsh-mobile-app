@@ -37,21 +37,28 @@ export const loginUser = (token) => (dispatch) => {
     }
 }
 
-export const logoutUser = (navigation) => (dispatch) => {
-    axios.post('/logout')
-    .then(()=>{
-      AsyncStorage.removeItem('@FcsAtHomeToken')
-      AsyncStorage.removeItem('@FcsAtHomeUsername')
-      AsyncStorage.removeItem('@FcsAtHomeUserLevel')
-      AsyncStorage.removeItem('@FcsAtHomeUserLevelName')
-      delete axios.defaults.headers.common['Authorization']
-      dispatch({ type: SET_UNAUTHENTICATED })
-      navigation.reset({
-          index:0,
-          routes:[{name:'Landing Screen'}]
-      })
-    })
-    .catch(err=> {
-      console.log(err)
-    })
+export const logoutUser = (navigation, authenticated) => (dispatch) => {
+    if(authenticated){
+        axios.post('/logout')
+        .then(()=>{
+        AsyncStorage.removeItem('@FcsAtHomeToken')
+        AsyncStorage.removeItem('@FcsAtHomeUsername')
+        AsyncStorage.removeItem('@FcsAtHomeUserLevel')
+        AsyncStorage.removeItem('@FcsAtHomeUserLevelName')
+        delete axios.defaults.headers.common['Authorization']
+        dispatch({ type: SET_UNAUTHENTICATED })
+        navigation.reset({
+            index:0,
+            routes:[{name:'Landing Screen'}]
+        })
+        })
+        .catch(err=> {
+        console.log(err)
+        })
+    } else {
+        navigation.reset({
+            index:0,
+            routes:[{name:'Landing Screen'}]
+        }) 
+    }
 }

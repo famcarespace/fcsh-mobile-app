@@ -1,7 +1,6 @@
 export const sensors = [
     //contact sensor
     {
-        id:1,
         cat:'Sensor',
         "Battery": 85,
         "Bright": null,
@@ -37,7 +36,6 @@ export const sensors = [
     },
     //motion sensor
     {
-        id:2,
         cat:'Sensor',
         "Battery": 40,
         "Bright": null,
@@ -73,7 +71,6 @@ export const sensors = [
     },
     //water leak sensor
     {
-        id:3,
         cat:'Sensor',
         "Battery": 100,
         "Bright": null,
@@ -104,7 +101,6 @@ export const sensors = [
     },
     //panic button
     {
-        id:4,
         cat:'Sensor',
         "Battery": 40,
         "Bright": null,
@@ -135,7 +131,6 @@ export const sensors = [
     },
     //Smart Bulb
     {
-        id:5,
         cat:'Smart Bulb',
         "Battery": null,
         "Bright": 69,
@@ -171,8 +166,7 @@ export const sensors = [
     },
     //smart bulb
     {
-        id:6,
-        cat:'bulb',
+        cat:'Smart Bulb',
         "Battery": null,
         "Bright": 69,
         "Conversion": "on",
@@ -207,7 +201,6 @@ export const sensors = [
     },
     //smart plug
     {
-        id:7,
         cat:'Smart Plug',
         "Battery": null,
         "Bright": null,
@@ -243,7 +236,6 @@ export const sensors = [
     },
     //smart switch
     {
-        id:8,
         cat:'Smart Switch',
         "Battery": null,
         "Bright": null,
@@ -281,21 +273,21 @@ export const sensors = [
 
 export const overview = [
     {
-        Category: 'Sensors',
+        Category: 'Sensor',
         DeviceCount:4,
     },
     {
-        Category: 'Smart Bulbs',
+        Category: 'Smart Bulb',
         DeviceCount:2,
     },
     {
         Category: 'Smart Plug',
         DeviceCount:1,
     },
-    {
+   /* {
         Category: 'Smart Switch',
         DeviceCount:1,
-    },
+    },*/
 ]
 
 export const allAlerts= [

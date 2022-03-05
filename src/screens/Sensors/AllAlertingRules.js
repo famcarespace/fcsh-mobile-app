@@ -34,7 +34,10 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
           setLoading(false)
         })
       }
-      else setAllActiveAlerts(allAlerts)
+      else {
+        setAllActiveAlerts(allAlerts)
+        setLoading(false)
+      }
     },[])
     const renderItem = ({item}) => {
       return(

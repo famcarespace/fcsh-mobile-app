@@ -24,6 +24,7 @@ export class MediaSlider extends Component {
     }
 
     _renderItem({item, index}) {
+        if(this.props.authenticated){
         return (
         <View
             style={{
@@ -47,6 +48,31 @@ export class MediaSlider extends Component {
             }
 
         </View>
+        )}
+        else return(
+        <View
+            style={{
+            position: 'relative',
+            justifyContent: 'center',
+            }}> 
+            {  item.type==='video'? 
+                <VideoSlide index={index} blobName={item.src} 
+                StatusID={this.props.StatusID}
+                authenticated={this.props.authenticated}/>  
+                :
+                <Image
+                    style={{
+                        width: width,
+                        height: height,
+                        alignSelf: 'center',
+                    }}
+                    source={item.src}
+                    resizeMethod={'resize'}
+                    resizeMode={'cover'}
+                />
+            }
+
+        </View> 
         )
     }
 

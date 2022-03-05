@@ -35,7 +35,10 @@ const DashboardScreen = ({ navigation, route }) =>{
           setLoading(false)
       })
     }
-    else setHomeOverview(overview)
+    else {
+      setHomeOverview(overview)
+      setLoading(false)
+    }
   },[])
 
   const renderItem = ({item}) => (

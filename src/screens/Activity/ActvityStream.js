@@ -38,7 +38,10 @@ const ActivityStreamScreen = ({ navigation, route }) => {
         setLoading(false)
       })
     }
-    else setFeed(posts)
+    else {
+      setFeed(posts)
+      setLoading(false)
+    }
   },[])
 
   const renderPost = ({item}) => {
@@ -58,13 +61,14 @@ const ActivityStreamScreen = ({ navigation, route }) => {
       </View>
       {parseInt(item.Media)>0 &&
         <View style={{marginLeft:-20}}>
-          <MediaSlider mediaArray={item.blobNames} StatusID={item.StatusID}/>
+          <MediaSlider mediaArray={item.blobNames} StatusID={item.StatusID}
+          authenticated={authenticated}/>
         </View>
       }
       <Text style={{marginVertical:15}}>{item.StatusText}</Text>
       <View style={styles.hr}/>
       <CommentFeed 
-        StatusID={item.StatusID} partial={true}/>
+        StatusID={item.StatusID} dummyComments={item.Comments}/>
       <Pressable
         onPress={()=> navigation.navigate({
           name:'Comments',

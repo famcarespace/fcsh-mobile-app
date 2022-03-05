@@ -7,17 +7,20 @@ import avatar2 from '../../assets/images/activity/1.jpg'
 export const posts = [
     {
         StatusID:1,
-        media: [{type:'video', src: expVid}],
+        Media:1,
+        blobNames: [{type:'video', src: expVid}],
         StatusText:'Hi! Do you want to see posts like this from your care agency? Subscribe to the App now.',
         CreatedOn: new Date().toString(),
         UserName:'Jane Doe',
         UserPic: avatar1,
         RoleName: 'Careprovider',
+        StatusUserByID:1,
         Comments: []
     },
     {
         StatusID:2,
-        media: [{type:'image', src:media1}, 
+        Media:3,
+        blobNames: [{type:'image', src:media1}, 
         {type:'image', src:media2}, 
         {type:'image', src:media3},],
         StatusText:'Sharing photos and videos keep loved ones connected. A video proof of visits and care provided give families peace of mind.',
@@ -25,15 +28,18 @@ export const posts = [
         UserName:'Jane Doe',
         UserPic: avatar1,
         RoleName: 'Careprovider',
+        StatusUserByID:2,
         Comments: [
             {
-                Id:1,
-                UserName:'Jonathan McCoy',
+                CommentID:1,
+                FirstName:'Jonathan',
+                LastName:'McCoy',
                 CommentText:"Good to see mom's photo. What time did you visit her?"
             },
             {
-                Id:2,
-                UserName:'John Doe',
+                CommentID:2,
+                FirstName:'John',
+                LastName:'Doe',
                 CommentText:'At 11:00am. I was with her for two hours.'
             }
         ]
