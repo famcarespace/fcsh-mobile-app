@@ -1,11 +1,15 @@
 import React,{useState, useEffect} from "react"
 import { SafeAreaView, View, Text, Image,
-TouchableOpacity } from "react-native"
+TouchableOpacity, 
+ActivityIndicator} from "react-native"
 import gateway from '../../../assets/images/gateway.png'
 import styles from "../../../assets/styles"
 import {MaterialIcons} from '@expo/vector-icons'
 import Tooltip from "../../components/Tooltip"
 import * as WebBrowser from 'expo-web-browser'
+import axios from 'axios'
+import {useSelector} from 'react-redux'
+import Subscribe from "../../components/Subscribe"
 
 const SettingsScreen = ({ navigation, route }) => {
     const [timezone, setTimezone] = useState('US/Eastern (GMT-4)')
@@ -17,19 +21,61 @@ const SettingsScreen = ({ navigation, route }) => {
     'US/Hawaii(GMT-10)',
     'GMT+0']
     const [result, setResult] = React.useState(null)
+    const {authenticated} = useSelector(state=>state)
+    const [errors,setErrors] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [currUser, setCurrUser] = useState({})
 
     useEffect(()=>{
       if(route.params?.selected){
+        setLoading(true)
+        console.log(route.params.selected)
+        var newSettings={
+          timezone: timezone,
+          smsAlert: sms,
+        }
         if(route.params.setting==='timezone')
-          setTimezone(route.params.selected)
-        else setSms(route.params.selected)
+          newSettings.timezone = route.params.selected
+        else { 
+          newSettings.smsAlert = route.params.selected
+        }
+        axios.put('/update-timezone',newSettings)
+        .then(res=>{
+          setTimezone(res.data.timezone)
+          setSms(res.data.smsAlert)
+          setLoading(false)
+          setErrors('')
+        })
+        .catch(err=>{
+          console.log(err)
+          setLoading(false)
+          setErrors('Unable to update. Try again.')
+        })
       }
-
     },[route.params?.selected])
+
+    useEffect(()=>{
+      if(authenticated){
+        axios
+        .get('/user')
+        .then(res=>{ 
+            setCurrUser(res.data)
+            setTimezone(res.data.Timezone)
+            setSms(res.data.SmsAlert)
+            setLoading(false)
+            setErrors('')
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Unable to get data. Try again')
+          setLoading(false)
+        })
+      }
+    },[])
 
     const handlePressureButtonAsync = async()=> {
       let result = await WebBrowser.openBrowserAsync(
-        'http://192.168.0.112'
+        `http://${currUser.EthernetIP}`
       )
       setResult(result)
     }
@@ -53,7 +99,7 @@ const SettingsScreen = ({ navigation, route }) => {
               <View>
                 <Text style={styles.textMuted}>IP: </Text>
                 <TouchableOpacity onPress={handlePressureButtonAsync}>
-                  <Text style={{color:'dodgerblue'}}>http://192.168.0.112</Text>
+                  <Text style={{color:'dodgerblue'}}>http://{currUser.EthernetIP}</Text>
                 </TouchableOpacity>
               </View> 
             </View>
@@ -68,6 +114,7 @@ const SettingsScreen = ({ navigation, route }) => {
           <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
             <Text>{timezone}</Text>
             <TouchableOpacity
+              disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Zone Selector',
                 params: { value: timezone,
@@ -85,8 +132,9 @@ const SettingsScreen = ({ navigation, route }) => {
             Text Notifications
           </Text>
           <View style={[styles.row, styles.pushRight]}>
-            <Text>{sms}</Text>
+            <Text>{sms?'Yes':'No'}</Text>
             <TouchableOpacity
+              disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Zone Selector',
                 params: { value: sms,
@@ -105,8 +153,10 @@ const SettingsScreen = ({ navigation, route }) => {
           </Text>
           <View style={[styles.row, styles.pushRight]}>
             <TouchableOpacity
+              disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Userinfo',
+                params: {user: currUser}
               })}>
               <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
             </TouchableOpacity>
@@ -119,6 +169,7 @@ const SettingsScreen = ({ navigation, route }) => {
           </Text>
           <View style={[styles.row, styles.pushRight]}>
             <TouchableOpacity
+              disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Update Password',
               })}>
@@ -133,6 +184,7 @@ const SettingsScreen = ({ navigation, route }) => {
           </Text>
           <View style={[styles.row, styles.pushRight]}>
             <TouchableOpacity
+              disabled={loading}
               onPress={()=> navigation.navigate({
                 name: 'Add Members',
               })}>
@@ -141,6 +193,8 @@ const SettingsScreen = ({ navigation, route }) => {
           </View>
         </View>
       </View>
+      {loading && <ActivityIndicator/>}
+      {!authenticated && <Subscribe navigation={navigation}/>}
       </SafeAreaView>
     );
 }

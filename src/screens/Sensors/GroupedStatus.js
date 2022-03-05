@@ -11,7 +11,7 @@ import {sensors} from '../../utils/device-data'
 import {useSelector, useDispatch} from 'react-redux'
 import { GET_DEVICE_LIST } from "../../redux/types"
 import axios from 'axios'
-import { convertToMins } from "../../utils/time-formatting"
+import { convertToMins } from "../../utils/functions"
 
 const GroupedStatus = ({ navigation, route }) =>{
   const { type } = route.params
@@ -21,7 +21,6 @@ const GroupedStatus = ({ navigation, route }) =>{
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState('')
   
-  const devices = sensors.filter(item=> item.cat===type)
   var redirectScreen=''
   var screenTitle=''
   switch (type){
@@ -43,21 +42,31 @@ const GroupedStatus = ({ navigation, route }) =>{
   }
 
   useEffect(() => {
-    axios
-    .get(`/device-list-by-type?cat=${type}`)
-    .then(res=>{
-        setErrors('')
-        dispatch({
-            type:GET_DEVICE_LIST,
-            payload:res.data
-        })
-        setLoading(false)
+    if(authenticated){
+      axios
+      .get(`/device-list-by-type?cat=${type}`)
+      .then(res=>{
+          setErrors('')
+          dispatch({
+              type:GET_DEVICE_LIST,
+              payload:res.data
+          })
+          setLoading(false)
+      })
+      .catch(err=>{
+          console.log(err)
+          setLoading(false)
+          setErrors('Unable to get data. Please refresh')
+      })
+    }
+    else{
+      let devices = sensors.filter(item=> item.cat===type)
+      dispatch({
+        type:GET_DEVICE_LIST,
+        payload:devices
     })
-    .catch(err=>{
-        console.log(err)
-        setLoading(false)
-        setErrors('Unable to get data. Please refresh')
-    })
+    }
+
   }, [type, dispatch])
 
   const renderItemSensor = ({item}) => {
@@ -91,11 +100,12 @@ const GroupedStatus = ({ navigation, route }) =>{
   return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
+      {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
       {loading? 
         <ActivityIndicator/>:
         deviceList.length===0?
           <Text>No devices yet</Text>:
-          <FlatList data={authenticated? deviceList: devices}
+          <FlatList data={deviceList}
           renderItem={renderItemSensor}
           keyExtractor={item => item.DeviceId}
           extraData={navigation}

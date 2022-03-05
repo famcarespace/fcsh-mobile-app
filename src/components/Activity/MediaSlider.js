@@ -3,6 +3,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { View, Dimensions, Image} from "react-native"
 import styles from "../../../assets/styles"
 import VideoSlide from "./VideoSlide"
+import { MEDIA_URL } from "../../redux/types"
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height/3
@@ -29,8 +30,8 @@ export class MediaSlider extends Component {
             position: 'relative',
             justifyContent: 'center',
             }}> 
-            {(item.type==='video')?   
-                <VideoSlide index={index} src={item.src}/>  
+            {new Set(['mp4','mov']).has(item.slice(-3))?   
+                <VideoSlide index={index} blobName={item} StatusID={this.props.StatusID}/>  
                 :
                 <Image
                     style={{
@@ -38,11 +39,13 @@ export class MediaSlider extends Component {
                         height: height,
                         alignSelf: 'center',
                     }}
-                    source={item.src}
+                    source={{
+                        uri: `${MEDIA_URL}/${this.props.StatusID}-media/${item}`}}
                     resizeMethod={'resize'}
                     resizeMode={'cover'}
                 />
             }
+
         </View>
         )
     }

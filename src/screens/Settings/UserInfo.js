@@ -2,7 +2,8 @@ import React from "react"
 import { SafeAreaView, View, Text } from "react-native"
 import styles from "../../../assets/styles"
 
-const UserInfoScreen = () => {
+const UserInfoScreen = ({navigation, route}) => {
+    const {user} = route.params
 
     return (
       <SafeAreaView style={styles.mainContentContainer}>
@@ -10,23 +11,23 @@ const UserInfoScreen = () => {
         <View style={styles.card}>
             <Text>
               <Text style={styles.textMuted}>Username: </Text>
-              guestuser
+              {user.UserName}
           </Text> 
           <Text>
               <Text style={styles.textMuted}>Location: </Text>
-              New Hampshire
+              {user.Location}
           </Text> 
           <Text>
               <Text style={styles.textMuted}>Contact: </Text>
-              +1-(603)-380-0834
+              {user.Phone}
           </Text> 
           <Text>
               <Text style={styles.textMuted}>Email: </Text>
-              jonathan.mccoy@familycarespace.com
+              {user.Email}
           </Text> 
           <Text>
               <Text style={styles.textMuted}>Role: </Text>
-              Family Admin
+              {user.RoleName}
           </Text> 
         </View>
       </View>

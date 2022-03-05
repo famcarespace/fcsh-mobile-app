@@ -6,20 +6,21 @@ FlatList,
 View} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
-import {overview, getIcon } from '../../utils/device-data'
+import {overview} from '../../utils/device-data'
 import axios from 'axios'
 import { useSelector } from "react-redux"
+import { getIcon } from "../../utils/functions"
 
 const DashboardScreen = ({ navigation, route }) =>{
-
-  const width = Dimensions.get('window').width-60
+  const width = Dimensions.get('window').width-60 
   const [errors,setErrors] = useState('')
-  const [homeOverview, setHomeOverview] = useState([])
   const [loading, setLoading] = useState(true)
   const {authenticated} = useSelector(state=> state)
+  const [homeOverview, setHomeOverview] = useState([])
   
   useEffect(()=>{
     if(authenticated){
+      setLoading(true)
       axios
       .get('/device-list')
       .then(res=>{
@@ -34,6 +35,7 @@ const DashboardScreen = ({ navigation, route }) =>{
           setLoading(false)
       })
     }
+    else setHomeOverview(overview)
   },[])
 
   const renderItem = ({item}) => (
@@ -65,7 +67,7 @@ const DashboardScreen = ({ navigation, route }) =>{
           <Text style={styles.marginBottom}>{errors}</Text>
         } 
         {loading?<ActivityIndicator/>:
-          <FlatList data={authenticated?homeOverview:overview} //homeOverview
+          <FlatList data={homeOverview} //homeOverview
           renderItem={renderItem}
           keyExtractor={item => homeOverview.indexOf(item)}
           extraData={navigation}

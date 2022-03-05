@@ -1,47 +1,65 @@
 import React, {useEffect, useState} from "react"
 import { View, Text, Dimensions, 
-  SafeAreaView,FlatList, 
+  SafeAreaView,FlatList, ActivityIndicator,
   Pressable, Modal, TouchableOpacity} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {allAlerts} from "../../utils/device-data"
 import {MaterialIcons} from '@expo/vector-icons'
-//import axios from 'axios'
+import axios from 'axios'
+import { useSelector } from "react-redux"
 
 const AllAlertingRulesScreen = ({ navigation, route }) => {
     const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
     const width = Dimensions.get('window').width
     const [modalOpen, setModalOpen] = useState(false)
     const [allActiveAlerts, setAllActiveAlerts] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [errors, setErrors] = useState('')
+    const {authenticated} = useSelector(state=>state)
 
     useEffect(()=>{
-
-    })
+      setLoading(true)
+      setErrors('')
+      if(authenticated){
+        axios.get('/all-rules')
+        .then(res=>{
+          console.log(res.data)
+          setAllActiveAlerts(res.data)
+          setLoading(false)
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Unable to get data. Try again.')
+          setLoading(false)
+        })
+      }
+      else setAllActiveAlerts(allAlerts)
+    },[])
     const renderItem = ({item}) => {
       return(
       <Pressable
-        key={item.id}
         style={[styles.card, {width:width}]}
         onPress={()=> navigation.navigate({
           name: 'New Alert',
           params: { rule: item, 
-            deviceId: item.deviceId,
+            deviceId: item.DeviceId,
             label: item.label,
             opts: item.statusOpts,
             newAlert: false,
             screenTitle:'Edit Alert' },
         })}>
-          <Text style={styles.h4}>{item.type}</Text>
-            <Text style={[styles.textMuted, styles.marginBottom]}>{item.loc}</Text>
-            <Text><Text style={styles.textMuted}>From: </Text>{item.from} hrs</Text>
-            <Text><Text style={styles.textMuted}>To: </Text> {item.to} hrs</Text>
-            <Text><Text style={styles.textMuted}>{item.label}: </Text> {item.status}</Text> 
+          <Text style={styles.h4}>{item.Name}</Text>
+            <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
+            <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
+            <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
+            <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
             <Text>
                 <Text style={styles.textMuted}>Days: </Text>
-                {item.days.includes(0)?
+                {item.Days.includes(0)?
                 weekdays.map((day,key)=>(
                     <Text key={key}> 
-                        {item.days[key]===1?day+"  ":null}
+                        {item.Days[key]===1?day+"  ":null}
                     </Text>
                 )):
                 <Text>Everyday</Text>}
@@ -64,15 +82,17 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
           <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
           <Text> What are alerts?</Text>
         </TouchableOpacity>
-        {allAlerts.length>0?
-          <FlatList data={allAlerts}
-            renderItem={renderItem}
-            keyExtractor={rule => rule.id}/>
-          :
-          <Text>No alerts</Text>
+        {errors!=='' && <Text>{errors}</Text>}
+        { loading? <ActivityIndicator/>:
+          allAlerts.length>0?
+            <FlatList data={allActiveAlerts}
+              renderItem={renderItem}
+              keyExtractor={rule => rule.RuleId}/>
+            :
+            <Text>No alerts</Text>
         }
       </View>
-      <Subscribe navigation={navigation}/>
+      {!authenticated && <Subscribe navigation={navigation}/>}
       <Modal
         animationType="fade"
         transparent={false}

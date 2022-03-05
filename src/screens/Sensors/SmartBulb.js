@@ -1,10 +1,12 @@
-import React,{useState} from "react"
+import React,{useState, useLayoutEffect} from "react"
 import { View, Text, SafeAreaView, TouchableOpacity, Platform, ActivityIndicator } from "react-native"
 import styles from "../../../assets/styles"
 import {MaterialIcons} from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 import Subscribe from "../../components/Subscribe"
 import axios from 'axios'
+import { useSelector, useDispatch } from "react-redux"
+import { UPDATE_DEVICE_STATUS, UPDATE_HSV_SETTINGS } from "../../redux/types"
 
 const SmartBulbScreen = ({navigation, route }) => {
     const {device} = route.params
@@ -14,24 +16,84 @@ const SmartBulbScreen = ({navigation, route }) => {
     const [bright, setBright] = useState(device.Bright)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const {authenticated} = useSelector(state=>state)
+    const dispatch = useDispatch()
 
-    const handleChange = () => {
-        setLoading(true)
-        axios.post('/toggle-single',{
-            deviceId:device.DeviceId,
-            status:!power
-        })
-        .then(res=>{
-            setPower(res.data.status)
+    const handlePowerChange = () => {
+        if(authenticated){
+            setLoading(true)
             setError('')
-            setLoading(false)
-        })
-        .catch(err=>{
-            console.log(err)
-            setError('Unable to update. Try again.')
-            setLoading(false)
-        })
+            axios.post('/toggle-single',{
+                deviceId:device.DeviceId,
+                status:!power
+            })
+            .then(res=>{
+                setPower(res.data.status)
+                dispatch({
+                    type:UPDATE_DEVICE_STATUS,
+                    payload:{
+                    deviceMac: device.MacAddr,
+                    status: res.data.status,
+                    battery:null,
+                    lastMessageTime:res.data.time,
+                    conversion:res.data.status?'On':'Off',
+                    lastMessage:res.data.status?'1':'0'
+                    }
+                })
+                setLoading(false)
+            })
+            .catch(err=>{
+                console.log(err)
+                setError('Unable to update. Try again.')
+                setLoading(false)
+            })
+        }
+        else setPower(!power)
     }
+
+    const handlehsvChange = () => {
+        if(authenticated){
+            setLoading(true)
+            setError('')
+            axios.post('/hsv-settings',{
+                deviceId:device.DeviceId,
+                hue:hue, sat:sat, bright:bright
+            })
+            .then(res=>{
+                dispatch({
+                    type:UPDATE_HSV_SETTINGS,
+                    payload:{
+                    deviceMac: device.MacAddr,
+                    hue:hue,
+                    sat:sat,
+                    bright:bright
+                    }
+                })
+                setLoading(false)
+            })
+            .catch(err=>{
+                console.log(err)
+                setError('Unable to update. Try again.')
+                setLoading(false)
+            })
+        }
+    }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <TouchableOpacity
+            disabled={loading}
+            onPress={()=> navigation.navigate({
+                name: 'Device Settings',
+                params: { device: device },
+            })}>
+                <MaterialIcons name='settings' size={25} color='dodgerblue'/>
+            </TouchableOpacity>
+          ),
+        });
+      }, [navigation])
+
 
     return (
     <SafeAreaView style={styles.mainContentContainer}>
@@ -39,7 +101,7 @@ const SmartBulbScreen = ({navigation, route }) => {
             <TouchableOpacity
                 style={[styles.powerButton, styles.marginBottom]}
                 diabled={loading}
-                onPress={handleChange}>
+                onPress={handlePowerChange}>
                 {power?
                     <MaterialIcons name='power-settings-new'
                     size={150} color='dodgerblue'/>
@@ -48,11 +110,9 @@ const SmartBulbScreen = ({navigation, route }) => {
                     size={150} color='lightgray'/>
                 }
             </TouchableOpacity>
-            <Text style={[styles.marginBottom, styles.row]}>
+            <Text style={styles.marginBottom}>
                 {power? 'Power On':'Power Off'}
-                {loading && <ActivityIndicator/>}
             </Text>
-            {error!=='' && <Text>{error}</Text>}
             {(device.Type===7 && Platform.OS==='ios') &&
             <View style={{width:"100%"}}>
                 <Text style={styles.textLeft}>Hue</Text>
@@ -64,6 +124,7 @@ const SmartBulbScreen = ({navigation, route }) => {
                     maximumTrackTintColor="lightgray"
                     onValueChange={setHue}
                     value={hue}
+                    disabled={loading}
                 />
                 <Text style={styles.textLeft}>Saturation</Text>
                 <Slider
@@ -74,6 +135,7 @@ const SmartBulbScreen = ({navigation, route }) => {
                     maximumTrackTintColor="lightgray"
                     onValueChange={setSat}
                     value={sat}
+                    disabled={loading}
                 />
                 <Text style={styles.textLeft}>Brightness</Text>
                 <Slider
@@ -84,20 +146,22 @@ const SmartBulbScreen = ({navigation, route }) => {
                     maximumTrackTintColor="lightgray"
                     onValueChange={setBright}
                     value={bright}
+                    disabled={loading}
                 />
-            </View>}
-            <TouchableOpacity
-                style={{marginVertical:30}}
-                onPress={()=> navigation.navigate({
-                    name: 'Device Settings',
-                    params: { device: device },
-                })
-                }>
-                <Text style={styles.link}>Settings</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={{marginVertical:30}}
+                    disabled={loading}
+                    onPress={handlehsvChange}>
+                    <Text style={[styles.link,{textAlign:'center'}]}>Save Color</Text>
+                </TouchableOpacity>
+            </View>
+            }
+
+            {loading && <ActivityIndicator/>}
+            {error!=='' && <Text style={{color:'tomato'}}>{error}</Text>}
         </View>
 
-        <Subscribe navigation={navigation}/>
+        {!authenticated && <Subscribe navigation={navigation}/>}
     </SafeAreaView>
     )
 }

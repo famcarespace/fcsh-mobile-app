@@ -1,8 +1,3 @@
-import sensor from '../../assets/images/sensor.png'
-import bulb from '../../assets/images/bulb.png'
-import plug from '../../assets/images/smart-plug.png'
-import switches from '../../assets/images/switches.png'
-
 export const sensors = [
     //contact sensor
     {
@@ -27,36 +22,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-13T06:53:59.040Z",
-        customAlerts:true,
-        label:'Status',
-        statusOpts:['Open','Close'],
-        alertRules:[
-            {
-                id:1,
-                from:'18:00',
-                to:'07:00',
-                status:'open',
-                label:'Status',
-                statusOpts:['Open','Close'],
-                days:[0,0,0,0,0,1,1],
-                timer:true,
-                duration:{
-                    hrs:'00',
-                    mins:'10'
-                }
-            },
-            {
-                id:2,
-                from:'09:00',
-                to:'18:00',
-                status:'close',
-                label:'Status',
-                statusOpts:['Open','Close'],
-                days:[1,1,0,0,0,0,0],
-                timer:false,
-                duration:{}
-            },
-        ],
         history:[
             {
                 id:1,
@@ -93,25 +58,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2021-06-22T06:49:35.130Z",
-        customAlerts:true,
-        label:'Motion',
-        statusOpts:['Yes','No'],
-        alertRules:[
-            {
-                id:1,
-                from:'07:00',
-                to:'21:00',
-                status:'No',
-                label:'Motion',
-                statusOpts:['Yes','No'],
-                timer:true,
-                duration:{
-                    hrs:'02',
-                    mins:'00'
-                },
-                days:[1,1,1,1,1,1,1]
-            },
-        ],
         history:[
             {
                 id:1,
@@ -148,8 +94,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2021-06-22T06:47:46.833Z",
-        customAlerts:false,
-        alertRules:[],
         history:[
             {
                 id:1,
@@ -181,8 +125,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2021-06-22T06:49:35.130Z",
-        alertRules:[],
-        customAlerts:false,
         history:[
             {
                 id:1,
@@ -214,24 +156,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2022-01-17T12:42:32.367Z",
-        customAlerts:true,
-        label:'Power',
-        statusOpts:['On','Off'],
-        alertRules:[
-            {
-                id:1,
-                from:'23:00',
-                to:'07:00',
-                status:'On',
-                label:'Power',
-                statusOpts:['On','Off'],
-                days:[1,1,1,1,1,1,1],
-                timer:true,
-                duration:{
-                    hrs:'00', mins:'20'
-                }
-            },
-        ],
         history:[
             {
                 id:1,
@@ -268,10 +192,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-17T12:42:32.367Z",
-        customAlerts:true,
-        label:'Power',
-        statusOpts:['On','Off'],
-        alertRules:[],
         history:[
             {
                 id:1,
@@ -308,10 +228,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-17T15:20:28.433Z",
-        customAlerts:true,
-        label:'Power',
-        statusOpts:['On','Off'],
-        alertRules:[],
         history:[
             {
                 id:1,
@@ -348,10 +264,6 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2021-12-24T06:07:35.770Z",
-        customAlerts:true,
-        label:'Power',
-        statusOpts:['On','Off'],
-        alertRules:[],
         history:[
             {
                 id:1,
@@ -388,80 +300,97 @@ export const overview = [
 
 export const allAlerts= [
     {
-        id:1,
-        deviceId:1,
-        type:'Contact Sensor',
-        loc:'front door',
-        from:'18:00',
-        to:'07:00',
-        status:'open',
+        RuleId:1,
+        DeviceId:1,
+        Name:'Contact Sensor',
+        type:1,
+        Location:'front door',
+        StartTime:'18:00',
+        EndTime:'07:00',
+        Conversion:'open',
+        Threshold: '1',
         label:'Status',
         statusOpts:['Open','Close'],
-        days:[0,0,0,0,0,1,1],
-        timer:true,
-        duration:{
+        Days:['0','0','0','0','0','1','1'],
+        Timer:true,
+        Duration:{
             hrs:'00',
             mins:'10'
-        }
+        },
     },
     {
-        id:2,
-        deviceId:1,
-        type:'Contact Sensor',
-        loc:'front door',
-        from:'09:00',
-        to:'18:00',
-        status:'close',
+        RuleId:2,
+        DeviceId:1,
+        Name:'Contact Sensor',
+        Type:1,
+        Location:'front door',
+        StartTime:'09:00',
+        EndTime:'18:00',
+        Conversion:'close',
+        Threshold:'0',
         label:'Status',
         statusOpts:['Open','Close'],
-        days:[1,1,0,0,0,0,0],
-        timer:false,
-        duration:{ hrs:'00', mins:'00'}
+        Days:['1','1','0','0','0','0','0'],
+        Timer:false,
+        Duration:{ hrs:'00', mins:'00'}
     },
     {
-        deviceId:2,
-        loc:'Bedside',
-        type:'Motion Sensor',
-        id:3,
-        from:'07:00',
-        to:'21:00',
-        status:'No',
+        DeviceId:15,
+        Location:'Bedside',
+        Name:'Motion Sensor',
+        type:4,
+        RuleId:3,
+        StartTime:'07:00',
+        EndTime:'21:00',
+        Conversion:'No',
+        Threshold:'0',
         label:'Motion',
         statusOpts:['Yes','No'],
-        days:[1,1,1,1,1,1,1],
-        timer:true,
-        duration:{
+        Days:['1','1','1','1','1','1','1'],
+        Timer:true,
+        Duration:{
             hrs:'02',
             mins:'00'
         }
     },
     {
-        deviceId:5,
-        loc:'Bathroom',
-        type:'Smart Bulb',
-        id:4,
-        from:'23:00',
-        to:'07:00',
-        status:'On',
+        DeviceId:16,
+        Location:'Bathroom',
+        Name:'Smart Bulb',
+        RuleId:4,
+        StartTime:'23:00',
+        EndTime:'07:00',
+        Conversion:'On',
+        Threshold:1,
         label:'Power',
         statusOpts:['On','Off'],
-        days:[1,1,1,1,1,1,1],
-        timer:true,
-        duration:{
+        Days:['1','1','1','1','1','1','1'],
+        Timer:true,
+        Duration:{
             hrs:'00', mins:'20'
         }
     },
 ]
 
-export const getIcon = (cat) => {
-    switch(cat) {
-        case 'Sensor':
-            return sensor
-        case 'Smart Bulb':
-            return bulb
-        case 'Smart Plug':
-            return plug
-        case 'Smart Switch':
-            return switches
-    }
-}
+export const guestUser = {
+    "CreatedOn": "2021-06-02T06:20:57.977Z",
+    "Email": "amygaskin@familycarespace.com",
+    "EthernetIP": "192.168.0.112",
+    "GatewayMac":"30:ae:7b:f1:e3:eg",
+    "FirstName": "Amy",
+    "Gateway": 1,
+    "IsActive": true,
+    "LastLoginTime": null,
+    "LastName": "Gaskin",
+    "Location": "Florida",
+    "LoggedIn": true,
+    "PasswordHash": "1234",
+    "Phone": "+13212364777",
+    "ResetPasswordToken": null,
+    "Role": 2,
+    "RoleName": "FamilyAdmin",
+    "SmsAlert": true,
+    "Timezone": "US/Eastern",
+    "UserId": 1,
+    "UserName": "familyadmin",
+  }

@@ -36,3 +36,22 @@ export const loginUser = (token) => (dispatch) => {
       axios.defaults.headers.common['Authorization'] = ''
     }
 }
+
+export const logoutUser = (navigation) => (dispatch) => {
+    axios.post('/logout')
+    .then(()=>{
+      AsyncStorage.removeItem('@FcsAtHomeToken')
+      AsyncStorage.removeItem('@FcsAtHomeUsername')
+      AsyncStorage.removeItem('@FcsAtHomeUserLevel')
+      AsyncStorage.removeItem('@FcsAtHomeUserLevelName')
+      delete axios.defaults.headers.common['Authorization']
+      dispatch({ type: SET_UNAUTHENTICATED })
+      navigation.reset({
+          index:0,
+          routes:[{name:'Landing Screen'}]
+      })
+    })
+    .catch(err=> {
+      console.log(err)
+    })
+}

@@ -1,5 +1,5 @@
 import React,{useState} from "react"
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Button } from "react-native"
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Button, ActivityIndicator } from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
@@ -16,27 +16,30 @@ const DeviceSettingsScreen = ({navigation, route }) => {
     const dispatch = useDispatch()
 
     const handleSubmit = () => {
-        var settings = {
-            location: location, 
-            deviceId:device.DeviceId
-        }
-        if(location.length>0){
-            setLoading(true)
-            setErrors('')
-            axios.put('/device-settings/', settings)
-            .then(res=>{
-                dispatch({
-                    type:POST_DEVICE_SETTINGS,
-                    payload: settings
+        if(authenticated){
+            var settings = {
+                location: location, 
+                deviceId:device.DeviceId
+            }
+            if(location.length>0){
+                setLoading(true)
+                setErrors('')
+                axios.put('/device-settings/', settings)
+                .then(res=>{
+                    dispatch({
+                        type:POST_DEVICE_SETTINGS,
+                        payload: settings
+                    })
+                    setLocation(res.data)
+                    setLoading(false)
                 })
-                setLocation(res.data)
-                setLoading(false)
-            })
-            .catch(()=>{
-                setErrors('Unable to update. Try again.')
-                setLoading(false)
-            })
+                .catch(()=>{
+                    setErrors('Unable to update. Try again.')
+                    setLoading(false)
+                })
+            }
         }
+        else alert('location updated')
     }
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -68,7 +71,8 @@ const DeviceSettingsScreen = ({navigation, route }) => {
                 value={location}
                 placeholder="Device Location"
             />
-            {errors!==''&& <Text>{errors}</Text>}
+            {errors!==''&& <Text style={{color:'tomato'}}>{errors}</Text>}
+            {loading && <ActivityIndicator/>}
         </View>
         <View>
             {new Set([1,4,6,7,9,10,11,13]).has(device.Type) && <TouchableOpacity

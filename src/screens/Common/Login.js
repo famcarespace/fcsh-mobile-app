@@ -59,15 +59,13 @@ const LoginScreen = ({navigation,route}) => {
                         placeholder = 'Password'/>
                 </View>
                 <TouchableOpacity
-                    style={[styles.marginBottom, styles.row]}
+                    style={styles.marginBottom}
                     disabled={loading}
                     onPress={handleSubmit}>
                         <Text style={styles.link}>Login</Text>
-                        {loading && <ActivityIndicator size="small"/> }
                 </TouchableOpacity>
-                <Text style={{color:'red'}}>
-                    {error}
-                </Text>
+                {error!=='' && <Text style={{color:'tomato'}}>{error}</Text>}
+                {loading && <ActivityIndicator size="small"/> }
             </View>
 
         </SafeAreaView>
