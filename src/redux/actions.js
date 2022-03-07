@@ -53,7 +53,8 @@ export const logoutUser = (navigation, authenticated) => (dispatch) => {
         })
         })
         .catch(err=> {
-        console.log(err)
+            console.log(err)
+            navigation.goBack()
         })
     } else {
         navigation.reset({

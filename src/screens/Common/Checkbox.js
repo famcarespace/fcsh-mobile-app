@@ -14,7 +14,7 @@ const CheckboxScreen = ({ navigation, route }) => {
 
     const handleChange = (key) => {
         let temp = {...checked}
-        temp[key] = temp[key]===1?0:1
+        temp[key] = temp[key]==='1'?'0':'1'
         setChecked(temp)
     }
 
@@ -28,7 +28,7 @@ const CheckboxScreen = ({ navigation, route }) => {
                             <Pressable
                                 key={key}
                                 onPress={()=>handleChange(key)}>
-                                {checked[key]===1?
+                                {checked[key]==='1'?
                                     <MaterialIcons name='check-box' size={24} color='dodgerblue'/>
                                     :   
                                     <MaterialIcons name='check-box-outline-blank'

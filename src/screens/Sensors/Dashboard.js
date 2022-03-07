@@ -30,7 +30,7 @@ const DashboardScreen = ({ navigation, route }) =>{
       })
       .catch(err=>{
           console.log(err)
-          setErrors('Unable to get data. Reload the app')
+          setErrors('Unable to get data. Refresh the screen')
           setHomeOverview([])
           setLoading(false)
       })
@@ -42,6 +42,7 @@ const DashboardScreen = ({ navigation, route }) =>{
   },[])
 
   const renderItem = ({item}) => (
+    item.DeviceCount!==0 &&
     <TouchableOpacity
         style={[styles.card, styles.row,{width:width}]}
         onPress={()=> navigation.navigate({

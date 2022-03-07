@@ -14,6 +14,7 @@ import { Provider, useSelector } from "react-redux"
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from './src/redux/types'
 import DrawerNavigator from './src/navigators/DrawerNavigator';
 axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
+//axios.defaults.baseURL = 'http://localhost:5000/iot'
 
 const App = () => {
   const [isReady, setIsReady] = useState(false)

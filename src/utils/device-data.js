@@ -21,18 +21,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-13T06:53:59.040Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'open'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'close'
-            }
-        ]
+        customAlerts: true,
     },
     //motion sensor
     {
@@ -56,18 +45,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2021-06-22T06:49:35.130Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'On'
-            }
-        ]
+        customAlerts:true,
     },
     //water leak sensor
     {
@@ -91,13 +69,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2021-06-22T06:47:46.833Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'Leak'
-            }
-        ]
+        customAlerts:false,
     },
     //panic button
     {
@@ -121,13 +93,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2021-06-22T06:49:35.130Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            }
-        ]
+        customAlerts:false
     },
     //Smart Bulb
     {
@@ -151,18 +117,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "0",
         "lastMessageTime": "2022-01-17T12:42:32.367Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'Off'
-            }
-        ]
+        customAlerts:true
     },
     //smart bulb
     {
@@ -186,18 +141,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-17T12:42:32.367Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'Off'
-            }
-        ]
+        customAlerts:true
     },
     //smart plug
     {
@@ -221,18 +165,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2022-01-17T15:20:28.433Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'Off'
-            }
-        ]
+        customAlerts:true
     },
     //smart switch
     {
@@ -256,18 +189,7 @@ export const sensors = [
         "isActive": true,
         "lastMessage": "1",
         "lastMessageTime": "2021-12-24T06:07:35.770Z",
-        history:[
-            {
-                id:1,
-                timestamp: new Date().toString(),
-                status:'On'
-            },
-            {
-                id:2,
-                timestamp: new Date().toString(),
-                status:'Off'
-            }
-        ]
+        customAlerts:true
     },
 ]
 
@@ -301,8 +223,6 @@ export const allAlerts= [
         EndTime:'07:00',
         Conversion:'open',
         Threshold: '1',
-        label:'Status',
-        statusOpts:['Open','Close'],
         Days:['0','0','0','0','0','1','1'],
         Timer:true,
         Duration:{
@@ -320,8 +240,6 @@ export const allAlerts= [
         EndTime:'18:00',
         Conversion:'close',
         Threshold:'0',
-        label:'Status',
-        statusOpts:['Open','Close'],
         Days:['1','1','0','0','0','0','0'],
         Timer:false,
         Duration:{ hrs:'00', mins:'00'}
@@ -330,14 +248,12 @@ export const allAlerts= [
         DeviceId:15,
         Location:'Bedside',
         Name:'Motion Sensor',
-        type:4,
+        Type:4,
         RuleId:3,
         StartTime:'07:00',
         EndTime:'21:00',
-        Conversion:'No',
+        Conversion:'no occupancy',
         Threshold:'0',
-        label:'Motion',
-        statusOpts:['Yes','No'],
         Days:['1','1','1','1','1','1','1'],
         Timer:true,
         Duration:{
@@ -385,4 +301,73 @@ export const guestUser = {
     "Timezone": "US/Eastern",
     "UserId": 1,
     "UserName": "familyadmin",
-  }
+}
+
+export const demoHistory = [
+    {
+    "conversion": "on",
+    "deviceMac": "56789",
+    "gatewayMac": "30:ae:7b:e1:e1:66",
+    "id": "0328fa56-6c46-4083-ab01-b2467ab6ea7f",
+    "location": "Bedside",
+    "name": "Smart Bulb",
+    "state": true,
+    "time": 1646633568883,
+    "type": 7,
+    }
+]
+
+export const allStatusOpts = [
+        {
+            opts:[
+                {
+                    Conversion:'close',
+                    Status:'0',
+                },
+                {
+                    Conversion:'open',
+                    Status:'1',
+                }
+            ],
+            Type:1
+        },
+        {
+            opts:[
+                {
+                    Conversion:'no occupancy',
+                    Status:'0',
+                },
+                {
+                    Conversion:'motion',
+                    Status:'1',
+                }
+            ],
+            Type:4
+        },
+        {
+            opts:[
+                {
+                    Conversion:'off',
+                    Status:'0',
+                },
+                {
+                    Conversion:'on',
+                    Status:'1',
+                }
+            ],
+            Type:7
+        },
+        {
+            opts:[
+                {
+                    Conversion:'off',
+                    Status:'0',
+                },
+                {
+                    Conversion:'on',
+                    Status:'1',
+                }
+            ],
+            Type:13
+        },
+]

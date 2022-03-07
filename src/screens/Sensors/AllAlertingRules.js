@@ -24,7 +24,6 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
       if(authenticated){
         axios.get('/all-rules')
         .then(res=>{
-          console.log(res.data)
           setAllActiveAlerts(res.data)
           setLoading(false)
         })
@@ -46,23 +45,20 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         onPress={()=> navigation.navigate({
           name: 'New Alert',
           params: { rule: item, 
-            deviceId: item.DeviceId,
-            label: item.label,
             opts: item.statusOpts,
-            newAlert: false,
-            screenTitle:'Edit Alert' },
+            newAlert: false },
         })}>
-          <Text style={styles.h4}>{item.Name}</Text>
+            <Text style={styles.h4}>{item.Name}</Text>
             <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
             <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
             <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
             <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
             <Text>
                 <Text style={styles.textMuted}>Days: </Text>
-                {item.Days.includes(0)?
+                {item.Days.includes('0')?
                 weekdays.map((day,key)=>(
                     <Text key={key}> 
-                        {item.Days[key]===1?day+"  ":null}
+                        {item.Days[key]==='1'?day+"  ":null}
                     </Text>
                 )):
                 <Text>Everyday</Text>}
@@ -73,6 +69,10 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
               {item.duration.hrs} hrs {item.duration.mins} mins
             </Text>
             }
+          <Text
+            style={{position:'absolute', right:10, top:10, fontSize:12, color:'dodgerblue'}}>
+              Edit
+          </Text>            
         </Pressable>
       )
     }

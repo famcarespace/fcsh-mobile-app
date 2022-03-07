@@ -1,31 +1,65 @@
-import React,{useState, useLayoutEffect} from "react"
+import React,{useState, useLayoutEffect, useEffect} from "react"
 import { View, Text, Dimensions, 
   SafeAreaView,FlatList,
   Button, Pressable, TouchableOpacity,
-Modal} from "react-native"
+Modal,
+ActivityIndicator} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {MaterialIcons} from '@expo/vector-icons'
+import axios from 'axios'
+import { useSelector } from "react-redux"
+import {allAlerts, allStatusOpts} from "../../utils/device-data"
 
 const DeviceAlertingRulesScreen = ({ navigation, route }) => {
-    const {alertRules, deviceId, label, statusOpts} = route.params
-    const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
+    const {device} = route.params
+    const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sa','Su']
     const width = Dimensions.get('window').width
     const [modalOpen, setModalOpen] = useState(false)
+    const [deviceAlerts, setDeviceAlerts] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [errors, setErrors] = useState('')
+    const {authenticated} = useSelector(state=>state)
+    const [statusOpts, setStatusOpts] = useState([])
 
     useLayoutEffect(()=>{
       navigation.setOptions({
         headerRight:()=>
-          <Button onPress={()=> navigation.navigate({
+          <Button 
+            disabled ={loading}
+            onPress={()=> navigation.navigate({
             name: 'New Alert',
-            params: {deviceId: deviceId,
-                      label: label,
-                      opts: statusOpts,
-                      newAlert:true,
-                    rule:null}
-            })} title='+'/>
+            params: { rule: {DeviceId: device.DeviceId}, 
+              statusOpts: statusOpts,
+              newAlert: true},
+          })} title='+'/>
         })
-    },[navigation])
+    },[navigation, statusOpts, loading])
+
+    useEffect(()=>{
+      setLoading(true) 
+      setErrors('')
+      if(authenticated){
+        axios.get(`/device-rules?deviceId=${device.DeviceId}`)
+        .then(res=>{
+         // console.log(res.data.statusOpts)
+          setDeviceAlerts(res.data.rules)
+          setStatusOpts(res.data.statusOpts)
+          setLoading(false)
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Unable to get data. Try again.')
+          setLoading(false)
+        })
+      }
+      else {
+        setDeviceAlerts(allAlerts.filter(item=> item.DeviceId===device.DeviceId))
+       // console.log(allStatusOpts.filter(item=> {if(item.Type===device.Type) return item.opts})[0].opts)
+        setStatusOpts(allStatusOpts.filter(item=> {if(item.Type===device.Type) return item.opts})[0].opts) 
+        setLoading(false)
+      }
+    },[])
 
     const renderItem = ({item}) => (
       <Pressable
@@ -33,21 +67,18 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
         onPress={()=> navigation.navigate({
           name: 'New Alert',
           params: { rule: item, 
-            deviceId: deviceId,
-            label: label,
-            opts: statusOpts,
-            newAlert: false,
-            screenTitle:'Edit Alert' },
+            statusOpts: statusOpts,
+            newAlert: false},
         })}>
-            <Text><Text style={styles.textMuted}>From: </Text>{item.from} hrs</Text>
-            <Text><Text style={styles.textMuted}>To: </Text> {item.to} hrs</Text>
-            <Text><Text style={styles.textMuted}>{label}: </Text> {item.status}</Text> 
+            <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
+            <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
+            <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
             <Text>
                 <Text style={styles.textMuted}>Days: </Text>
-                {item.days.includes(0)?
+                {item.Days.includes('0')?
                 weekdays.map((day,key)=>(
                     <Text key={key}> 
-                        {item.days[key]===1?day+"  ":null}
+                        {item.Days[key]==='1'?day+"  ":null}
                     </Text>
                 )):
                 <Text>Everyday</Text>}
@@ -60,7 +91,8 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
             }
           <Text
             style={{position:'absolute', right:10, top:10, fontSize:12, color:'dodgerblue'}}>
-              Edit</Text>
+              Edit
+          </Text>
         </Pressable>
     )
     return (
@@ -71,15 +103,16 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
           <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
           <Text> What are alerts?</Text>
         </TouchableOpacity>
-        {alertRules.length>0?
-          <FlatList data={alertRules}
+        { loading? <ActivityIndicator/>:
+          deviceAlerts.length>0? 
+          <FlatList data={deviceAlerts}
             renderItem={renderItem}
-            keyExtractor={rule => rule.id}/>
+            keyExtractor={rule => rule.RuleId}/>
           :
           <Text>No alerts</Text>
         }
       </View>
-      <Subscribe navigation={navigation}/>
+      {!authenticated && <Subscribe navigation={navigation}/>}
       <Modal
         animationType="fade"
         transparent={false}

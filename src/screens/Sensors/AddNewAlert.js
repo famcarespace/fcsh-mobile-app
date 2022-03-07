@@ -1,32 +1,32 @@
 import React, {useState, useEffect, useLayoutEffect} from "react"
 import { ScrollView, Text, View,
-SafeAreaView, Switch,
-TouchableOpacity, Button,
-TextInput} from "react-native"
+SafeAreaView,
+TouchableOpacity, Button, ActivityIndicator} from "react-native"
 import {MaterialIcons} from '@expo/vector-icons'
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
-//import axios from 'axios'
-
+import axios from 'axios'
+import { useSelector } from "react-redux"
 
 const getCurrTime = () => {
  return (new Date().getHours()+':'+new Date().getMinutes())
 }
 
 const AddNewAlertScreen = ({ navigation, route }) => {
-  const {deviceId, rule, label, opts, newAlert} = route.params
-  const [from, setFrom] = useState(newAlert? getCurrTime:rule.from)
-  const [to, setTo] = useState(newAlert? getCurrTime:rule.to)
-  const [status, setStatus] = useState(newAlert?opts[0]:rule.status)
-  const [days, setDays] = useState(newAlert?[0,0,0,0,0,0,0]:rule.days)
-  const [timer, setTimer] = useState(newAlert?false:rule.timer)
-  const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
-  const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
+  const {rule, statusOpts } = route.params
+  var { newAlert } = route.params
+  const [from, setFrom] = useState(newAlert? getCurrTime:rule.StartTime)
+  const [to, setTo] = useState(newAlert? getCurrTime:rule.EndTime)
+  const [status, setStatus] = useState(newAlert?statusOpts[0].Conversion:rule.Conversion)
+  const [days, setDays] = useState(newAlert?['0','0','0','0','0','0','0']:rule.Days)
+//  const [timer, setTimer] = useState(newAlert?false:rule.timer)
+//  const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
+//  const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
-
   const [errors, setErrors] = useState('')
   const [loading, setLoading] = useState(false)
+  const {authenticated} = useSelector(state=> state)
 
   useEffect(()=>{
     if(route.params?.selected){
@@ -53,43 +53,101 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={handleSubmit} title="Save" />
+        <Button 
+        disabled ={loading}
+        onPress={handleSubmit} title="Save" />
       ),
     });
-  }, [navigation, handleSubmit,from,to,status,days,timer,hrs,mins])
+  }, [navigation, handleSubmit,from,to,status,days, loading/*timer,hrs,mins*/])
 
   const handleSubmit = () => {
     setLoading(true)
     let complete = true
     if(!days.includes('1')) complete = false
-    if(timer && (hrs==='00' && mins==='00')) complete = false
+   // if(timer && (hrs==='00' && mins==='00')) complete = false
     if(complete){
       let newRule = {
-        from: from,
-        to: to,
-        status: status,
-        days:days,
-        timer:timer,
+        StartTime: from,
+        EndTime: to,
+        Threshold: statusOpts.find(item=> item.Conversion === status).Status,
+        Conversion: status,
+        Days:days,
+        action: newAlert?1:2,
+        DeviceId: rule.DeviceId,
+        RuleId: rule.RuleId
+      /*  timer:timer,
         duration:{
           hrs:hrs,
           mins:mins
-        }
+        }*/
       }
-      alert('Alert Set')
-      /*
-      axios
-      .post(`/new-rule`,
-      {deviceId: deviceId, rule:newRule})
-      .then(res=>{
-          setErrors('')
+      console.log(newRule)
+      if (authenticated){
+        if(newAlert){
+          axios
+          .post(`/device-rule`,
+          {rule:newRule})
+          .then(res=>{
+              setFrom(res.data.StartTime)
+              setTo(res.data.EndTime)
+              setStatus(res.data.Conversion)
+              setDays(res.data.Days)
+              setErrors('')
+              newAlert = false
+              setLoading(false)
+              alert('alert set')
+          })
+          .catch(err=>{
+              console.log(err)
+              setErrors('Unable to update. Try again')
+              setLoading(false)
+          })
+        }
+        else {
+          axios.put(`/device-rule`,{rule:newRule})
+          .then(res=>{
+              setFrom(res.data.StartTime)
+              setTo(res.data.EndTime)
+              setStatus(res.data.Conversion)
+              setDays(res.data.Days)
+              setErrors('')
+              setLoading(false)
+              alert('alert set')
+          })
+          .catch(err=>{
+              console.log(err)
+              setErrors('Unable to update. Try again')
+              setLoading(false)
+          })
+        }
+
+      }
+      else{
+        setLoading(false)
+        alert('Alert Set')
+      }
+    }
+    else alert('Complete all fields')
+  }
+
+  const confirmDelete = () => { 
+    alert('Do you want to delete this alert?')
+  }
+
+  const handleDelete = () => {
+    setLoading(true)
+    if(authenticated){
+      axios.delete(`/device-rule?ruleId=${rule.RuleId}&deviceId=${rule.DeviceId}`)
+      .then(()=>{
           setLoading(false)
+          setErrors('')
+          navigation.goBack()
       })
       .catch(err=>{
           console.log(err)
-          setErrors(err)
+          setErrors('Unable to delete. Try again.')
           setLoading(false)
       })
-      */
     }
   }
   return(
@@ -115,7 +173,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                       prevScreen:'New Alert',
                       setting:'startTime'}
                   })}>
-                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                  <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -132,14 +190,14 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                       prevScreen:'New Alert',
                       setting:'endTime'}
                   })}>
-                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                  <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
                 </TouchableOpacity>
               </View>
             </View>
              {/****** STATUS ******/}
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
               <Text style={[styles.textMuted,{flex:1}]}>
-                {label}
+                Status
                 <Tooltip msg='Sensor activity that triggers the alert.'/>
               </Text>
               <View style={[styles.row, styles.pushRight]}>
@@ -148,11 +206,11 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                   onPress={()=> navigation.navigate({
                     name: 'Selector',
                     params: { value: status,
-                      options:opts,
+                      options:statusOpts.map(item=> item.Conversion),
                       prevScreen:'New Alert',
                       setting:'status'},
                   })}>
-                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                  <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -161,10 +219,10 @@ const AddNewAlertScreen = ({ navigation, route }) => {
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
               <Text style={[styles.textMuted,{flex:1}]}>Days</Text>
               <View style={[styles.row, styles.pushRight,{flex:2}]}>
-                {days.includes(0)?
+                {days.includes('0')?
                   weekdays.map((day,idx)=>(
                     <Text key={idx}> 
-                        {days[idx]===1?day+"  ":null}
+                        {days[idx]==='1'?day+"  ":null}
                     </Text>
                   )): 
                   <Text>EveryDay</Text>
@@ -175,11 +233,12 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                     params: { value: days,
                     options:weekdays},
                   })}>
-                  <MaterialIcons name='navigate-next' size={30} color='lightgray'/>
+                  <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
                 </TouchableOpacity>
               </View>
             </View>
             {/****** TIMER ******/}
+            {/*
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
               <Text style={[styles.textMuted,{flex:1}]}>
                 Timer
@@ -196,6 +255,7 @@ Ex with timer: Alert triggered when front door remains open for more than 10 min
               </View>
             </View>
             {/****** DURATION ******/}
+            {/*
             {timer &&
             <View style={[styles.marginBottom,{zIndex:-1}]}>
               <Text style={styles.textMuted}>Hours</Text>
@@ -210,10 +270,18 @@ Ex with timer: Alert triggered when front door remains open for more than 10 min
               placeholder='Set Minutes'/>
             </View>
             }
+          */}
       </View>
       </View>
+      {!newAlert && <TouchableOpacity
+                disabled={loading}
+                onPress={handleDelete}>
+        <Text style={[styles.link,{marginVertical:20, textAlign:'center', color:'tomato'}]}>Delete</Text>
+      </TouchableOpacity>}
+      {errors!=='' && <Text style={{color:'tomato', textAlign:'center'}}>{errors}</Text>}
+      {loading && <ActivityIndicator/>}
     </ScrollView>
-    <Subscribe navigation={navigation}/>
+    {!authenticated && <Subscribe navigation={navigation}/>}
     </SafeAreaView>
   )
 } 

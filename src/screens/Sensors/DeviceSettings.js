@@ -75,20 +75,17 @@ const DeviceSettingsScreen = ({navigation, route }) => {
             {loading && <ActivityIndicator/>}
         </View>
         <View>
-            {new Set([1,4,6,7,9,10,11,13]).has(device.Type) && <TouchableOpacity
+            {device.customAlerts && <TouchableOpacity
                 onPress={()=> navigation.navigate({
                     name: 'Device Alerts',
-                    params: { deviceId: device.DeviceId,
-                        label: device.Name,
-                        statusOpts:device.statusOpts,
-                        alertRules: device.alertRules }
+                    params: { device: device }
                   })}>
                 <Text style={[styles.link,{marginVertical:20}]}>Alerts</Text>
             </TouchableOpacity>}
             <TouchableOpacity
                 onPress={()=> navigation.navigate({
                     name: 'Device History',
-                    params: { history: device.history },
+                    params: { device: device },
                   })
                 }>
                 <Text style={styles.link}>History</Text>

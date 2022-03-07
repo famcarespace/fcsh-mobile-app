@@ -23,6 +23,7 @@ import AddUsersScreen from '../screens/Settings/AddUsers';
 import DrawerNavigator from './DrawerNavigator';
 import LandingScreen from '../screens/Common/LandingScreen';
 import RedirectScreen from '../screens/Common/Redirect';
+import DateSelectorScreen from '../screens/Common/DateSelector';
 
 const Stack = createNativeStackNavigator()
 
@@ -42,6 +43,7 @@ export const HomeStackNavigator= ()=>{
                 <Stack.Screen name='Selector' component={SelectorScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='Checkbox' component={CheckboxScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='TimeSelector' component={TimeSelectorScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='DateSelector' component={DateSelectorScreen} options={{headerShown:false}}/>
                 <Stack.Screen name='Smart Bulb' component={SmartBulbScreen} 
                     options={( {route} ) => ({
                         title: route.params.screenTitle
