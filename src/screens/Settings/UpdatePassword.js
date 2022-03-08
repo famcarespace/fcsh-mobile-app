@@ -45,7 +45,7 @@ const UpdatePasswordScreen = ({navigation, route }) => {
                     setLoading(false)
                 })
             }
-            else alert('Password updated')
+            else Alert.alert('Password updated')
         }
     }
     return (

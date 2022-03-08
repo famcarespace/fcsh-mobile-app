@@ -1,23 +1,19 @@
 import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DashboardScreen from '../screens/Sensors/Dashboard'
-import DeviceAlertingRulesScreen from '../screens/Sensors/DeviceAlertingRules'
+import DeviceAlertingRulesScreen from '../screens/Alerts/DeviceAlertingRules'
 import GroupedStatusScreen from '../screens/Sensors/GroupedStatus'
 import DeviceSettingsScreen from '../screens/Sensors/DeviceSettings';
 import DeviceHistoryScreen from '../screens/Sensors/DeviceHistory';
-import AddNewAlertScreen from '../screens/Sensors/AddNewAlert'
+import AddNewAlertScreen from '../screens/Alerts/AddNewAlert'
 import SelectorScreen from '../screens/Common/Selector';
 import CheckboxScreen from '../screens/Common/Checkbox';
 import TimeSelectorScreen from '../screens/Common/TimeSelector';
 import SmartBulbScreen from '../screens/Sensors/SmartBulb'
 import SmartSwitchScreen from '../screens/Sensors/SmartSwitch'
-import ActivityStreamScreen from '../screens/Activity/ActvityStream'
-import CommentsScreen from '../screens/Activity/Comments';
-import NewPostScreen from '../screens/Activity/NewPost';
 import UserInfoScreen from '../screens/Settings/UserInfo';
 import SettingsScreen from '../screens/Settings/Settings';
 import UpdatePasswordScreen from '../screens/Settings/UpdatePassword';
-import ImageGalleryScreen from '../screens/Activity/ImageGallery';
 import LoginScreen from '../screens/Common/Login';
 import AddUsersScreen from '../screens/Settings/AddUsers';
 import DrawerNavigator from './DrawerNavigator';
@@ -52,22 +48,6 @@ export const HomeStackNavigator= ()=>{
             </Stack.Navigator>
         )
 }
-
-export const ActivityStackNavigator = () => {
-    return(
-        <Stack.Navigator>
-            <Stack.Screen name='Activity Stream' component={ActivityStreamScreen} options={{headerShown:false}}/>
-            <Stack.Screen name='Comments' component={CommentsScreen}/>
-        </Stack.Navigator>
-    )
-}
-
-export const NewPostStackNavigator = () => (
-    <Stack.Navigator>
-        <Stack.Screen name='New Post' component={NewPostScreen}/>
-        <Stack.Screen name='Album' component={ImageGalleryScreen}/>
-    </Stack.Navigator>
-)
 
 export const SettingsStackNavigator = () => (
     <Stack.Navigator>

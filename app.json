@@ -22,9 +22,7 @@
       "supportsTablet": true,
       "bundleIdentifier":"com.familycarespace.familyhomeportal",
       "buildNumber":"1.0.0",
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "This app uses the gallery to upload selected photos to Activity Stream."
-      }
+      "infoPlist": {}
     },
     "android": {
       "adaptiveIcon": {
@@ -33,7 +31,7 @@
       },
       "package":"com.familycarespace.familyhomeportal",
       "versionCode":1,
-      "permissions":["READ_EXTERNAL_STORAGE","CAMERA_ROLL"]
+      "permissions":[]
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -111,7 +111,7 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
           <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
           <Text> What are alerts?</Text>
         </TouchableOpacity>
-        {errors!=='' && <Text style={styles.marginBottom}>{errors}</Text>} 
+        {errors!=='' && <Text style={[styles.marginBottom, {color:'tomato'}]}>{errors}</Text>} 
         { loading? <ActivityIndicator/>:
           <FlatList data={deviceAlerts}
             style={{height:height}}

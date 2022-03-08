@@ -39,7 +39,7 @@ const DeviceSettingsScreen = ({navigation, route }) => {
                 })
             }
         }
-        else alert('location updated')
+        else Alert.alert('','Location Updated')
     }
     React.useLayoutEffect(() => {
         navigation.setOptions({

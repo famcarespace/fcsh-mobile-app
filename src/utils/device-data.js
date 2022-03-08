@@ -229,6 +229,26 @@ export const allAlerts= [
             hrs:'00',
             mins:'10'
         },
+        Subscribers: [
+            {
+              "Role": 2,
+              "Subscribed": 1,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "Subscribed": 1,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "Subscribed": 1,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            },
+          ],
     },
     {
         RuleId:2,
@@ -242,7 +262,27 @@ export const allAlerts= [
         Threshold:'0',
         Days:['1','1','0','0','0','0','0'],
         Timer:false,
-        Duration:{ hrs:'00', mins:'00'}
+        Duration:{ hrs:'00', mins:'00'},
+        Subscribers: [
+            {
+              "Role": 2,
+              "Subscribed": 1,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "Subscribed": 0,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "Subscribed": 1,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            }
+        ],
     },
     {
         DeviceId:15,
@@ -259,7 +299,27 @@ export const allAlerts= [
         Duration:{
             hrs:'02',
             mins:'00'
-        }
+        },
+        Subscribers: [
+            {
+              "Role": 2,
+              "Subscribed": 1,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "Subscribed": 1,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "Subscribed": 0,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            },
+        ]
     },
     {
         DeviceId:16,
@@ -274,9 +334,27 @@ export const allAlerts= [
         statusOpts:['On','Off'],
         Days:['1','1','1','1','1','1','1'],
         Timer:true,
-        Duration:{
-            hrs:'00', mins:'20'
-        }
+        Duration:{hrs:'00', mins:'20'},
+        Subscribers: [
+            {
+              "Role": 2,
+              "Subscribed": 1,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "Subscribed": 1,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "Subscribed": 1,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            }
+        ],
     },
 ]
 
@@ -381,4 +459,71 @@ export const allStatusOpts = [
             ],
             Type:13
         },
+]
+
+export const activeAlerts= [
+    {
+        AlertId:1,
+        RuleId:1,
+        DeviceId:1,
+        Name:'Contact Sensor',
+        type:1,
+        Location:'front door',
+        Time:'18:00',
+        Conversion:'open',
+        Threshold: '1',
+        AlertAssigned: 'false',
+        HandledByUserName:null,
+        HandledByUserId:null,
+        AssignTime:null,
+        Subscribers: [
+            {
+              "Role": 2,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            },
+        ],
+    },
+    {
+        AlertId:2,
+        RuleId:1,
+        DeviceId:1,
+        Name:'Contact Sensor',
+        type:1,
+        Location:'front door',
+        Time:'18:00',
+        Conversion:'open',
+        Threshold: '1',
+        HandledByUserName: 'Neighbor',
+        HandledByUserId:1,
+        AssignTime:'18:05',
+        AlertAssigned: 'true',
+        Subscribers: [
+            {
+              "Role": 2,
+              "UserId": 1,
+              "UserName": "Family Member",
+            },
+            {
+              "Role": 4,
+              "UserId": 2,
+              "UserName": "Neighbor",
+            },
+            {
+              "Role": 6,
+              "UserId": 3,
+              "UserName": "Care Provider",
+            },
+        ],
+    },
 ]

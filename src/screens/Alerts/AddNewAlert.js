@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useLayoutEffect} from "react"
 import { ScrollView, Text, View,
-SafeAreaView,
+SafeAreaView, Alert,
 TouchableOpacity, Button, ActivityIndicator} from "react-native"
 import {MaterialIcons} from '@expo/vector-icons'
 import styles from "../../../assets/styles"
@@ -20,14 +20,14 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   const [to, setTo] = useState(newAlert? getCurrTime:rule.EndTime)
   const [status, setStatus] = useState(newAlert?statusOpts[0].Conversion:rule.Conversion)
   const [days, setDays] = useState(newAlert?['0','0','0','0','0','0','0']:rule.Days)
-//  const [timer, setTimer] = useState(newAlert?false:rule.timer)
+  const [subscribers, setSubscribers] = useState(rule.Subscribers)
+  //  const [timer, setTimer] = useState(newAlert?false:rule.timer)
 //  const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
 //  const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
   const [errors, setErrors] = useState('')
   const [loading, setLoading] = useState(false)
   const {authenticated} = useSelector(state=> state)
-
   useEffect(()=>{
     if(route.params?.selected){
       setStatus(route.params.selected)
@@ -36,7 +36,17 @@ const AddNewAlertScreen = ({ navigation, route }) => {
 
   useEffect(()=>{
     if(route.params?.checked){
-      setDays(route.params.checked)
+      if(route.params.setting==='days')
+        setDays(route.params.checked)
+      else {
+        var temp = subscribers
+        var i=0
+        while(i<temp.length){
+          temp[i].Subscribed = parseInt(route.params.checked[i])
+          i++
+        }
+        setSubscribers(temp)
+      }
     }
   },[route.params?.checked])
 
@@ -61,7 +71,6 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   }, [navigation, handleSubmit,from,to,status,days, loading/*timer,hrs,mins*/])
 
   const handleSubmit = () => {
-    setLoading(true)
     let complete = true
     if(!days.includes('1')) complete = false
    // if(timer && (hrs==='00' && mins==='00')) complete = false
@@ -74,7 +83,8 @@ const AddNewAlertScreen = ({ navigation, route }) => {
         Days:days,
         action: newAlert?1:2,
         DeviceId: rule.DeviceId,
-        RuleId: rule.RuleId
+        RuleId: rule.RuleId,
+        Subscribers: subscribers,
       /*  timer:timer,
         duration:{
           hrs:hrs,
@@ -82,6 +92,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
         }*/
       }
       if (authenticated){
+        setLoading(true)
         if(newAlert){
           axios
           .post(`/device-rule`,
@@ -94,7 +105,8 @@ const AddNewAlertScreen = ({ navigation, route }) => {
               setErrors('')
               newAlert = false
               setLoading(false)
-              alert('alert set')
+              Alert.alert('Alert Set')
+              navigation.goBack()
           })
           .catch(err=>{
               console.log(err)
@@ -109,9 +121,10 @@ const AddNewAlertScreen = ({ navigation, route }) => {
               setTo(res.data.EndTime)
               setStatus(res.data.Conversion)
               setDays(res.data.Days)
+              setSubscribers(res.data.Subscribers)
               setErrors('')
               setLoading(false)
-              alert('alert set')
+              Alert.alert('Alert Set')
           })
           .catch(err=>{
               console.log(err)
@@ -119,23 +132,30 @@ const AddNewAlertScreen = ({ navigation, route }) => {
               setLoading(false)
           })
         }
-
       }
       else{
         setLoading(false)
-        alert('Alert Set')
+        Alert.alert('Alert Set')
+        if(newAlert) navigation.goBack()
       }
     }
-    else alert('Complete all fields')
+    else Alert.alert('','Complete all fields')
   }
 
   const confirmDelete = () => { 
-    alert('Do you want to delete this alert?')
+    Alert.alert('Delete Alert', '', [
+      {
+        text: 'Yes',
+        onPress: () => handleDelete,
+        style: 'cancel',
+      },
+      { text: 'No' },
+    ]);
   }
 
   const handleDelete = () => {
-    setLoading(true)
     if(authenticated){
+    setLoading(true)
       axios.delete(`/device-rule?ruleId=${rule.RuleId}&deviceId=${rule.DeviceId}`)
       .then(()=>{
           setLoading(false)
@@ -149,6 +169,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
       })
     }
   }
+
   return(
       <SafeAreaView style={styles.mainContentContainer}>
       <ScrollView>
@@ -230,7 +251,23 @@ const AddNewAlertScreen = ({ navigation, route }) => {
                   onPress={()=> navigation.navigate({
                     name: 'Checkbox',
                     params: { value: days,
-                    options:weekdays},
+                    options:weekdays,
+                    setting:'days'},
+                  })}>
+                  <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {/****** SUBSCRIBERS ******/}
+            <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
+              <Text style={[styles.textMuted,{flex:1}]}>Subscribers</Text>
+              <View style={[styles.row, styles.pushRight,{flex:2}]}>
+                <TouchableOpacity
+                  onPress={()=> navigation.navigate({
+                    name: 'Checkbox',
+                    params: { value: subscribers.map(item=> item.Subscribed.toString()),
+                    options:subscribers.map(item=> item.UserName),
+                    setting:'subscribers'},
                   })}>
                   <MaterialIcons name='navigate-next' size={30} color='dodgerblue'/>
                 </TouchableOpacity>
@@ -274,7 +311,7 @@ Ex with timer: Alert triggered when front door remains open for more than 10 min
       </View>
       {!newAlert && <TouchableOpacity
                 disabled={loading}
-                onPress={handleDelete}>
+                onPress={confirmDelete}>
         <Text style={[styles.link,{marginVertical:20, textAlign:'center', color:'tomato'}]}>Delete</Text>
       </TouchableOpacity>}
       {errors!=='' && <Text style={{color:'tomato', textAlign:'center'}}>{errors}</Text>}

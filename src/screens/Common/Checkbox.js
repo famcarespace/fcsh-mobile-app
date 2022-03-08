@@ -9,7 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 
 const CheckboxScreen = ({ navigation, route }) => {
-    const { value, options } = route.params
+    const { value, options, setting } = route.params
     const [checked, setChecked] = React.useState(value)
 
     const handleChange = (key) => {
@@ -44,7 +44,8 @@ const CheckboxScreen = ({ navigation, route }) => {
                 onPress={()=>{
                     navigation.navigate({
                         name:'New Alert',
-                        params: {checked: Object.values(checked)},
+                        params: {checked: Object.values(checked),
+                        setting:setting},
                         merge:true
                     })
                 }}

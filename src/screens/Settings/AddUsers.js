@@ -16,7 +16,7 @@ const AddUsersScreen = ({navigation, route }) => {
 
     const handleSubmit = () => {
         if(email==='' || phone===''||firstname==='' || lastname===''){
-            alert('incomplete details')
+            Alert.alert('','Incomplete details')
         }
         else setCount(count-1)
     }

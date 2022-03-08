@@ -1,14 +1,12 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import ApprovePostsScreen from '../screens/Activity/ApprovePosts'
 import {MaterialIcons} from '@expo/vector-icons'
 import DeviceSettingsScreen from '../screens/Sensors/DeviceSettings'
 import DeviceAlertingRulesScreen from '../screens/Sensors/DeviceAlertingRules'
 import DeviceHistoryScreen from '../screens/Sensors/DeviceHistory'
-import { ActivityStackNavigator, NewPostStackNavigator } from './StackNavigator'
 const Tab = createBottomTabNavigator()
 
-
+/*
 export const ActivityTabNavigator = (level) => {
     return(
         <Tab.Navigator screenOptions={({ route }) => ({
@@ -35,6 +33,7 @@ export const ActivityTabNavigator = (level) => {
 
     )
 }
+*/
 export const DeviceSettingsTabNavigator = () => {
   return(
     <Tab.Navigator screenOptions={({ route }) => ({
