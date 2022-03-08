@@ -15,12 +15,12 @@ import { guestUser } from "../../utils/device-data"
 const SettingsScreen = ({ navigation, route }) => {
     const [timezone, setTimezone] = useState('US/Eastern (GMT-4)')
     const [sms, setSms] = useState('yes')
-    const zoneOpts = ['US/Eastern (GMT-4)',
-    'US/Central(GMT-5)',
-    'US/Mountain(GMT-7)',
-    'US/Alaska(GMT-8)',
-    'US/Hawaii(GMT-10)',
-    'GMT+0']
+    const zoneOpts = ['US/Eastern',
+    'US/Central',
+    'US/Mountain',
+    'US/Alaska',
+    'US/Hawaii',
+    'GMT']
     const [result, setResult] = React.useState(null)
     const {authenticated} = useSelector(state=>state)
     const [errors,setErrors] = useState('')
