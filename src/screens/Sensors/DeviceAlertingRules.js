@@ -14,7 +14,7 @@ import {allAlerts, allStatusOpts} from "../../utils/device-data"
 const DeviceAlertingRulesScreen = ({ navigation, route }) => {
     const {device} = route.params
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sa','Su']
-    const width = Dimensions.get('window').width
+    const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
     const [deviceAlerts, setDeviceAlerts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -31,18 +31,26 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
             name: 'New Alert',
             params: { rule: {DeviceId: device.DeviceId}, 
               statusOpts: statusOpts,
-              newAlert: true},
+              newAlert: true,
+              screenTitle:' New Alert'},
           })} title='+'/>
         })
     },[navigation, statusOpts, loading])
 
     useEffect(()=>{
+      fetchData()
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchData()
+      });
+      return unsubscribe
+    },[navigation])
+
+    const fetchData = () => {
       setLoading(true) 
       setErrors('')
       if(authenticated){
         axios.get(`/device-rules?deviceId=${device.DeviceId}`)
         .then(res=>{
-         // console.log(res.data.statusOpts)
           setDeviceAlerts(res.data.rules)
           setStatusOpts(res.data.statusOpts)
           setLoading(false)
@@ -55,11 +63,10 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
       }
       else {
         setDeviceAlerts(allAlerts.filter(item=> item.DeviceId===device.DeviceId))
-       // console.log(allStatusOpts.filter(item=> {if(item.Type===device.Type) return item.opts})[0].opts)
         setStatusOpts(allStatusOpts.filter(item=> {if(item.Type===device.Type) return item.opts})[0].opts) 
         setLoading(false)
       }
-    },[])
+    }
 
     const renderItem = ({item}) => (
       <Pressable
@@ -68,7 +75,8 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
           name: 'New Alert',
           params: { rule: item, 
             statusOpts: statusOpts,
-            newAlert: false},
+            newAlert: false,
+            screenTitle: 'Edit Alert'},
         })}>
             <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
             <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
@@ -103,13 +111,15 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
           <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
           <Text> What are alerts?</Text>
         </TouchableOpacity>
+        {errors!=='' && <Text style={styles.marginBottom}>{errors}</Text>} 
         { loading? <ActivityIndicator/>:
-          deviceAlerts.length>0? 
           <FlatList data={deviceAlerts}
+            style={{height:height}}
             renderItem={renderItem}
-            keyExtractor={rule => rule.RuleId}/>
-          :
-          <Text>No alerts</Text>
+            keyExtractor={rule => rule.RuleId}
+            ListEmptyComponent={<Text>No alerts set</Text>}
+            onRefresh={()=>fetchData()}
+            refreshing={loading}/>
         }
       </View>
       {!authenticated && <Subscribe navigation={navigation}/>}

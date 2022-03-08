@@ -1,10 +1,7 @@
 import React,{useState, useEffect} from "react"
-import {Text,
-TouchableOpacity,
-SafeAreaView,
-FlatList, ActivityIndicator,
-Dimensions,
-View} from "react-native"
+import {Text, TouchableOpacity,
+SafeAreaView, FlatList, ActivityIndicator,
+Dimensions, View} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {sensors} from '../../utils/device-data'
@@ -15,7 +12,7 @@ import { convertToMins } from "../../utils/functions"
 
 const GroupedStatus = ({ navigation, route }) =>{
   const { type } = route.params
-  const width = Dimensions.get('window').width
+  const {width, height} = Dimensions.get('window')
   const dispatch = useDispatch()
   const {deviceList, authenticated} = useSelector(state=>state)
   const [loading, setLoading] = useState(true)
@@ -41,8 +38,9 @@ const GroupedStatus = ({ navigation, route }) =>{
       screenTitle='Smart Switch'
   }
 
-  useEffect(() => {
+  const fetchData = () => {
     if(authenticated){
+      setLoading(true)
       axios
       .get(`/device-list-by-type?cat=${type}`)
       .then(res=>{
@@ -67,8 +65,11 @@ const GroupedStatus = ({ navigation, route }) =>{
       })
       setLoading(false)
     }
+  }
 
-  }, [type, dispatch])
+  useEffect(() => {
+    fetchData()
+  }, [type])
 
   const renderItemSensor = ({item}) => {
     return(
@@ -100,18 +101,20 @@ const GroupedStatus = ({ navigation, route }) =>{
 
   return (
     <SafeAreaView style={styles.mainContentContainer}>
-    <View style={styles.innerContainer}>
-      {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
-      {loading? 
-        <ActivityIndicator/>:
-        deviceList.length===0?
-          <Text>No devices yet</Text>:
-          <FlatList data={deviceList}
-          renderItem={renderItemSensor}
-          keyExtractor={item => item.DeviceId}
-          extraData={navigation}
+      <View style={styles.innerContainer}>
+        {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
+        {loading? <ActivityIndicator/>:
+          <FlatList 
+            style={{height:height}}
+            data={deviceList}
+            renderItem={renderItemSensor}
+            keyExtractor={item => item.DeviceId}
+            extraData={navigation}
+            ListEmptyComponent={<Text>No devices yet</Text>}
+            onRefresh={()=>fetchData()}
+            refreshing={loading}
           />
-      }
+        }
     </View>
     {!authenticated && <Subscribe navigation={navigation}/>}
     </SafeAreaView>

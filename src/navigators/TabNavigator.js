@@ -9,7 +9,7 @@ import { ActivityStackNavigator, NewPostStackNavigator } from './StackNavigator'
 const Tab = createBottomTabNavigator()
 
 
-export const ActivityTabNavigator = () => {
+export const ActivityTabNavigator = (level) => {
     return(
         <Tab.Navigator screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -29,7 +29,8 @@ export const ActivityTabNavigator = () => {
           })}>
             <Tab.Screen name='Stream' component={ActivityStackNavigator} options={{headerShown:false}}/>
             <Tab.Screen name='NewPost' component={NewPostStackNavigator} options={{headerShown:false}}/>
-            <Tab.Screen name='Approve' component={ApprovePostsScreen} options={{headerShown:false}}/>
+            { new Set(['1','2','7']).has(level)&&
+              <Tab.Screen name='Approve' component={ApprovePostsScreen} options={{headerShown:false}}/>}
         </Tab.Navigator> 
 
     )

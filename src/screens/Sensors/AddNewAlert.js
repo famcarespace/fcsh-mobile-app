@@ -81,7 +81,6 @@ const AddNewAlertScreen = ({ navigation, route }) => {
           mins:mins
         }*/
       }
-      console.log(newRule)
       if (authenticated){
         if(newAlert){
           axios

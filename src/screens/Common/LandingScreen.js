@@ -7,6 +7,7 @@ import { Video } from 'expo-av'
 import screen1 from '../../../assets/images/activityStream.mp4'
 import screen2 from '../../../assets/images/smart-devices-notification.png'
 import screen3 from '../../../assets/images/share-with-everyone.png'
+import { connect } from "react-redux"
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height/2
@@ -53,6 +54,14 @@ The ultimate platform designed for seniors aging in place at home.`,
       this.onSnap = this.onSnap.bind(this);
       this._ref=null
       this._videoref=null
+    }
+
+    componentDidMount(){
+        if(this.props.authenticated){
+            this.props.navigation.navigate({
+                name:'Enter app'
+            })
+        }
     }
     
     onSnap(index) {
@@ -140,4 +149,8 @@ The ultimate platform designed for seniors aging in place at home.`,
 
 }
 
-export default LandingScreen
+function mapStateToProps(state){
+    return {authenticated: state.authenticated}
+}
+
+export default connect(mapStateToProps)(LandingScreen)

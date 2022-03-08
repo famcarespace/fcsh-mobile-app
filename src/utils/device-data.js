@@ -314,7 +314,18 @@ export const demoHistory = [
     "state": true,
     "time": 1646633568883,
     "type": 7,
-    }
+    },
+    {
+        "conversion": "off",
+        "deviceMac": "56789",
+        "gatewayMac": "30:ae:7b:e1:e1:66",
+        "id": "0328fa56-6c46-4083-ab01-b2467ab6ea7g",
+        "location": "Bedside",
+        "name": "Smart Bulb",
+        "state": true,
+        "time": 1646833568883,
+        "type": 7,
+    },
 ]
 
 export const allStatusOpts = [

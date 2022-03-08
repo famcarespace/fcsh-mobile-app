@@ -6,6 +6,7 @@ import Subscribe from "../../components/Subscribe"
 import axios from 'axios'
 import { useSelector } from "react-redux"
 import {MaterialIcons} from '@expo/vector-icons'
+import { demoHistory } from "../../utils/device-data"
 
 const DeviceHistoryScreen = ({ navigation, route }) => {
   const {device} = route.params  
@@ -15,7 +16,7 @@ const DeviceHistoryScreen = ({ navigation, route }) => {
   const {authenticated} = useSelector(state=> state)
   const [history, setHistory] = useState([])
 
-  useEffect(()=>{
+  const fetchData = () => {
     if(authenticated){
       setLoading(true)
       axios.get(`/device-history?deviceId=${parseInt(device.DeviceId)}&day=${day}&partial=${false}`)
@@ -30,7 +31,14 @@ const DeviceHistoryScreen = ({ navigation, route }) => {
         setHistory([])
         setLoading(false)
       })
+    } else {
+      setHistory(demoHistory)
+      setLoading(false)
     }
+  }
+
+  useEffect(()=>{
+    fetchData()
   },[day])
 
   useEffect(()=>{
@@ -67,15 +75,15 @@ const DeviceHistoryScreen = ({ navigation, route }) => {
         </View>
       </View>
       { loading? <ActivityIndicator/>:
-        history.length>0?
         <View style={styles.card}>
           <FlatList data={history}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            ListEmptyComponent={<Text>No History to show</Text>}
+            onRefresh={()=>fetchData()}
+            refreshing={loading}
           />
         </View>
-        :
-        <Text>No history to show</Text>
       }
     </View>
     {!authenticated && <Subscribe navigation={navigation}/>}

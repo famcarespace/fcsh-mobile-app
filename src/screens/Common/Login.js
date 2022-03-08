@@ -4,9 +4,8 @@ import {SafeAreaView, Text, View, ActivityIndicator,
 import styles from '../../../assets/styles'
 import logo from '../../../assets/images/logo.png'
 import axios from 'axios'
-import { loginUser, interpretErrorCode } from '../../redux/actions'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
+import { setCurrUser, interpretErrorCode } from '../../redux/actions'
+import { useDispatch } from 'react-redux'
 
 const LoginScreen = ({navigation,route}) => {
     const [name,setName] = useState('')
@@ -25,7 +24,7 @@ const LoginScreen = ({navigation,route}) => {
                 if(res.data.error)
                     setError(res.data.msg)
                 else {
-                    dispatch(loginUser(`Bearer ${res.data.token}`))
+                    dispatch(setCurrUser(`Bearer ${res.data.token}`))
                      navigation.navigate({
                         name:'Enter app'
                     })

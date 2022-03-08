@@ -24,6 +24,11 @@ const ActivityStreamScreen = ({ navigation, route }) => {
   var to = currentPage*10
 
   useEffect(()=>{
+    fetchData()
+  },[])
+
+  const fetchData = () => {
+    setErrors('')
     if(authenticated){
       setLoading(true)
       axios.get(`/posts-of-all-residents?page=${currentPage}`)
@@ -42,7 +47,7 @@ const ActivityStreamScreen = ({ navigation, route }) => {
       setFeed(posts)
       setLoading(false)
     }
-  },[])
+  }
 
   const renderPost = ({item}) => {
     return(
@@ -90,17 +95,18 @@ const ActivityStreamScreen = ({ navigation, route }) => {
     <View style={styles.mainContentContainer}>
       <View style={[styles.innerContainer, styles.marginBottom]}>
         <Text>See Photo/Video updates from care agency</Text>
-        {errors !== '' && <Text>{errors}</Text>}
+        {errors !== '' && <Text style={{color:'tomato'}}>{errors}</Text>}
       </View>
       {loading? <ActivityIndicator/>:
-          feed.length===0?
-            <Text>No posts</Text>:
-              <FlatList
-              data={feed}
-              renderItem={renderPost}
-              keyExtractor={item=> item.StatusID}
-              extraData={navigation}
-              />
+          <FlatList
+          data={feed}
+          renderItem={renderPost}
+          keyExtractor={item=> item.StatusID}
+          extraData={navigation}
+          ListEmptyComponent={<Text>No posts yet</Text>}
+          onRefresh={()=>fetchData()}
+          refreshing={loading}
+          />
       }
     </View>
   );

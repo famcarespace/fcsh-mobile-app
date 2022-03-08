@@ -19,6 +19,10 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
     const {authenticated} = useSelector(state=>state)
 
     useEffect(()=>{
+      fetchData()
+    },[])
+
+    const fetchData = () =>{
       setLoading(true)
       setErrors('')
       if(authenticated){
@@ -37,43 +41,33 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         setAllActiveAlerts(allAlerts)
         setLoading(false)
       }
-    },[])
+    }
+
     const renderItem = ({item}) => {
       return(
-      <Pressable
-        style={[styles.card, {width:width}]}
-        onPress={()=> navigation.navigate({
-          name: 'New Alert',
-          params: { rule: item, 
-            opts: item.statusOpts,
-            newAlert: false },
-        })}>
-            <Text style={styles.h4}>{item.Name}</Text>
-            <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
-            <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
-            <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
-            <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
-            <Text>
-                <Text style={styles.textMuted}>Days: </Text>
-                {item.Days.includes('0')?
-                weekdays.map((day,key)=>(
-                    <Text key={key}> 
-                        {item.Days[key]==='1'?day+"  ":null}
-                    </Text>
-                )):
-                <Text>Everyday</Text>}
-            </Text>
-            {item.timer &&
+      <View style={[styles.card, {width:width}]}>
+          <Text style={styles.h4}>{item.Name}</Text>
+          <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
+          <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
+          <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
+          <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
+          <Text>
+              <Text style={styles.textMuted}>Days: </Text>
+              {item.Days.includes('0')?
+              weekdays.map((day,key)=>(
+                  <Text key={key}> 
+                      {item.Days[key]==='1'?day+"  ":null}
+                  </Text>
+              )):
+              <Text>Everyday</Text>}
+          </Text>
+          {item.timer &&
             <Text>
               <Text style={styles.textMuted}>Duration: </Text> 
               {item.duration.hrs} hrs {item.duration.mins} mins
             </Text>
-            }
-          <Text
-            style={{position:'absolute', right:10, top:10, fontSize:12, color:'dodgerblue'}}>
-              Edit
-          </Text>            
-        </Pressable>
+          }          
+      </View>
       )
     }
     
@@ -87,12 +81,12 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         {errors!=='' && <Text>{errors}</Text>}
         { loading? <ActivityIndicator/>:
-          allAlerts.length>0?
             <FlatList data={allActiveAlerts}
               renderItem={renderItem}
-              keyExtractor={rule => rule.RuleId}/>
-            :
-            <Text>No alerts</Text>
+              keyExtractor={rule => rule.RuleId}
+              ListEmptyComponent={<Text>No alerts set</Text>}
+              onRefresh={()=>fetchData()}
+              refreshing={loading}/>
         }
       </View>
       {!authenticated && <Subscribe navigation={navigation}/>}

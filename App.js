@@ -13,12 +13,11 @@ import store from './src/redux/store'
 import { Provider, useSelector } from "react-redux"
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED } from './src/redux/types'
 import DrawerNavigator from './src/navigators/DrawerNavigator';
-axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
-//axios.defaults.baseURL = 'http://localhost:5000/iot'
+//axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
+axios.defaults.baseURL = 'http://localhost:5000/iot'
 
 const App = () => {
   const [isReady, setIsReady] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
 
   async function cacheResourcesAsync() {
     const image = require('./assets/splash.png')
@@ -31,16 +30,13 @@ const App = () => {
       if(token){
         store.dispatch({type:SET_AUTHENTICATED})
         axios.defaults.headers.common['Authorization'] = token
-        setLoggedIn(true)
       }
       else {
         store.dispatch({type:SET_UNAUTHENTICATED})
         axios.defaults.headers.common['Authorization'] = ''
-        setLoggedIn(false)
       }
     } catch(e) {
       console.log(e)
-      setLoggedIn(false)
     }
   }
 
@@ -62,10 +58,7 @@ const App = () => {
       <Provider store={store}>
       <SafeAreaProvider>
         <NavigationContainer>
-          {loggedIn? 
-            <DrawerNavigator/>:
             <AuthStackNavigator/>
-          }
         </NavigationContainer>
       </SafeAreaProvider>
       </Provider>

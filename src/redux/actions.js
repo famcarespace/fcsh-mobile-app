@@ -14,7 +14,7 @@ export const interpretErrorCode = (code) => {
     return text
 }
 
-export const loginUser = (token) => (dispatch) => {
+export const setCurrUser = (token) => (dispatch) => {
     try{
         dispatch({type:SET_AUTHENTICATED})
         axios.defaults.headers.common['Authorization'] = token
@@ -24,6 +24,8 @@ export const loginUser = (token) => (dispatch) => {
             AsyncStorage.setItem('@FcsAtHomeUsername', res.data.FirstName)
             AsyncStorage.setItem('@FcsAtHomeUserLevel', res.data.Role.toString())
             AsyncStorage.setItem('@FcsAtHomeUserLevelName', res.data.RoleName)
+            AsyncStorage.setItem('@FcsAtHomeUserId', res.data.UserId.toString())
+            console.log(res.data)
             dispatch({
                 type: SET_CURR_USER,
                 payload:JSON.stringify(res.data)
@@ -45,6 +47,7 @@ export const logoutUser = (navigation, authenticated) => (dispatch) => {
         AsyncStorage.removeItem('@FcsAtHomeUsername')
         AsyncStorage.removeItem('@FcsAtHomeUserLevel')
         AsyncStorage.removeItem('@FcsAtHomeUserLevelName')
+        AsyncStorage.removeItem('@FcsAtHomeUserId')
         delete axios.defaults.headers.common['Authorization']
         dispatch({ type: SET_UNAUTHENTICATED })
         navigation.reset({
