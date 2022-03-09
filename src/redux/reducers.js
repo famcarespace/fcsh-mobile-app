@@ -18,18 +18,15 @@ import {
   export default function(state = initialState, action) {
     switch (action.type) {
         case SET_AUTHENTICATED:
-            console.log('set auth')
             return {
             ...state,
             authenticated: true
             }
         
         case SET_UNAUTHENTICATED:
-            console.log('set unauth')
             return initialState
     
         case SET_CURR_USER:
-            console.log('set user')
             //console.log(action.payload)
             return {
             ...state,

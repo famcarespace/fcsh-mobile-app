@@ -105,7 +105,7 @@ const GroupedStatus = ({ navigation, route }) =>{
         {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
         {loading? <ActivityIndicator/>:
           <FlatList 
-            style={{height:height}}
+            style={{height:height-30}}
             data={deviceList}
             renderItem={renderItemSensor}
             keyExtractor={item => item.DeviceId}

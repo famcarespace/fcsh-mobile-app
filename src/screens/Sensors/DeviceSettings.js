@@ -49,7 +49,7 @@ const DeviceSettingsScreen = ({navigation, route }) => {
             onPress={handleSubmit} title="Save" />
           ),
         });
-      }, [navigation, handleSubmit])
+      }, [navigation, handleSubmit, loading])
 
     return (
     <SafeAreaView style={styles.mainContentContainer}>
@@ -75,13 +75,22 @@ const DeviceSettingsScreen = ({navigation, route }) => {
             {loading && <ActivityIndicator/>}
         </View>
         <View>
-            {device.customAlerts && <TouchableOpacity
+            {device.customAlerts? 
+            <TouchableOpacity
                 onPress={()=> navigation.navigate({
                     name: 'Device Alerts',
                     params: { device: device }
                   })}>
                 <Text style={[styles.link,{marginVertical:20}]}>Alerts</Text>
-            </TouchableOpacity>}
+            </TouchableOpacity>:
+            <TouchableOpacity
+                onPress={()=> navigation.navigate({
+                    name: 'Subscribers',
+                    params: { device: device }
+                })}>
+                <Text style={[styles.link,{marginVertical:20}]}>Subscribers</Text>
+            </TouchableOpacity>
+            }
             <TouchableOpacity
                 onPress={()=> navigation.navigate({
                     name: 'Device History',

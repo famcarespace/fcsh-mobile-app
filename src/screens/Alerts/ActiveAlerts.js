@@ -8,9 +8,10 @@ import {activeAlerts} from "../../utils/device-data"
 import {MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios'
 import { useSelector } from "react-redux"
+import { convertToMins } from "../../utils/functions"
 
 const ActiveAlertsScreen = ({ navigation, route }) => {
-    const width = Dimensions.get('window').width
+    const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
     const [allActiveAlerts, setAllActiveAlerts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -25,8 +26,9 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
       setLoading(true)
       setErrors('')
       if(authenticated){
-        axios.get('/all-rules')
+        axios.get('/active-alerts')
         .then(res=>{
+          //console.log(res.data)
           setAllActiveAlerts(res.data)
           setLoading(false)
         })
@@ -42,17 +44,75 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
       }
     }
 
+    const handlePick = (id) =>{
+      setLoading(true)
+      setErrors('')
+      if(authenticated){
+        axios.put(`/pick-alert?alertId=${id}`)
+        .then(()=>{
+          fetchData()
+          Alert.alert('','Alert assigned to you. Thanks!')
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Action failed. Try again.')
+        })
+      }
+      else{
+      setLoading(false)
+      Alert.alert('','Alert assigned to you. Thanks!')
+      }
+    }
+
+    const handleUnpick = (id) =>{
+      setLoading(true)
+      setErrors('')
+      if(authenticated){
+        axios.put(`/unpick-alert?alertId=${id}`)
+        .then(()=>{
+          fetchData()
+          Alert.alert('','Alert unassigned')
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Action failed. Try again.')
+        })
+      } else{
+        setLoading(false)
+        Alert.alert('','Alert unassigned')
+      }
+    }
+
+    const handleResolve = (id) =>{
+      setLoading(true)
+      setErrors('')
+      if(authenticated){
+        axios.put(`/resolve-alert?alertId=${id}`)
+        .then(()=>{
+          fetchData()
+          Alert.alert('','Alert resolved. Thanks!')
+        })
+        .catch(err=>{
+          console.log(err)
+          setErrors('Action failed. Try again.')
+        })
+      } else {
+      setLoading(false)
+      Alert.alert('','Alert resolved. Thanks!')
+      }
+    }
+
     const handlePress = (item)=> {
-        if(item.AlertAssigned==='true'){
+        if(item.HandledByUserId!==null){
             //if handledByUserId === currentUserId
             Alert.alert('Take Action','',[
                 {
                     text: 'Resolve',
-                    //onPress: () => handleDelete,
+                    onPress: () => handleResolve(item.Id),
                 },
                 {
-                    text: 'Unassign',
-                    //onPress: () => handleDelete,
+                    text: 'Unpick',
+                    onPress: () => handleUnpick(item.Id),
                 },
                 {
                     text: 'Cancel',
@@ -62,7 +122,7 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
             Alert.alert('Take Action','',[
                 {
                     text: 'Pick',
-                    //onPress: () => handleDelete,
+                    onPress: () => handlePick(item.Id),
                 },
                 {
                     text: 'Cancel',
@@ -77,17 +137,16 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
       <View style={[styles.card, {width:width}]}>
           <Text style={styles.h4}>{item.Name}</Text>
           <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
-          <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
-          <Text><Text style={styles.textMuted}>At: </Text>{item.Time} hrs</Text>        
-          <Text><Text style={styles.textMuted}>Alert State: </Text> 
-            {item.AlertAssigned==='true'?
-                `Assigned to ${item.HandledByUserName} at ${item.AssignTime}`:
+          <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion+' '}{convertToMins(new Date(item.CreatedOn).getTime())}</Text>       
+          <Text><Text style={styles.textMuted}>Alert State: </Text>
+            {(item.Assigned===1)?
+                `Picked by ${item.Handler.FirstName+' '}${item.Handler.LastName} ${convertToMins(new Date(item.FirstResponse).getTime())}`:
                 <Text style={{color:'tomato'}}>Unassigned</Text>}
         </Text> 
       </View>
       </Pressable>
       )
-    }
+    }  
     
     return (
       <SafeAreaView style={styles.mainContentContainer}>
@@ -99,10 +158,12 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         {errors!=='' && <Text>{errors}</Text>}
         { loading? <ActivityIndicator/>:
-            <FlatList data={allActiveAlerts}
+            <FlatList 
+              style={{height:height-40}}
+              data={allActiveAlerts}
               renderItem={renderItem}
-              keyExtractor={rule => rule.AlertId}
-              ListEmptyComponent={<Text>No alerts set</Text>}
+              keyExtractor={rule => rule.Id}
+              ListEmptyComponent={<Text>All well here</Text>}
               onRefresh={()=>fetchData()}
               refreshing={loading}/>
         }

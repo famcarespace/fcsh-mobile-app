@@ -15,27 +15,22 @@ export const interpretErrorCode = (code) => {
 }
 
 export const setCurrUser = (token) => (dispatch) => {
+    AsyncStorage.setItem('@FcsAtHomeToken', token)
+    axios.defaults.headers.common['Authorization'] = token
+    dispatch({type:SET_AUTHENTICATED})
     try{
-        dispatch({type:SET_AUTHENTICATED})
-        axios.defaults.headers.common['Authorization'] = token
-        AsyncStorage.setItem('@FcsAtHomeToken', token)
         axios.get('/user')
-        .then(res=>{
-            AsyncStorage.setItem('@FcsAtHomeUsername', res.data.FirstName)
-            AsyncStorage.setItem('@FcsAtHomeUserLevel', res.data.Role.toString())
-            AsyncStorage.setItem('@FcsAtHomeUserLevelName', res.data.RoleName)
-            AsyncStorage.setItem('@FcsAtHomeUserId', res.data.UserId.toString())
-            console.log(res.data)
+        .then(async(res)=>{
+            //console.log(res.data)
+            await AsyncStorage.setItem('@FcsAtHomeCurrUserRole', res.data.Role.toString())
             dispatch({
                 type: SET_CURR_USER,
-                payload:JSON.stringify(res.data)
+                payload:res.data
             })
         })
         .catch(err=> console.log(err))
     } catch(e) {
       console.log(e)
-      dispatch({type:SET_UNAUTHENTICATED})
-      axios.defaults.headers.common['Authorization'] = ''
     }
 }
 
@@ -44,10 +39,7 @@ export const logoutUser = (navigation, authenticated) => (dispatch) => {
         axios.post('/logout')
         .then(()=>{
         AsyncStorage.removeItem('@FcsAtHomeToken')
-        AsyncStorage.removeItem('@FcsAtHomeUsername')
-        AsyncStorage.removeItem('@FcsAtHomeUserLevel')
-        AsyncStorage.removeItem('@FcsAtHomeUserLevelName')
-        AsyncStorage.removeItem('@FcsAtHomeUserId')
+        AsyncStorage.removeItem('@FcsAtHomeCurrUserRole')
         delete axios.defaults.headers.common['Authorization']
         dispatch({ type: SET_UNAUTHENTICATED })
         navigation.reset({

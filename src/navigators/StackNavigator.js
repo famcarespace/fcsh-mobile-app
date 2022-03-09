@@ -20,6 +20,9 @@ import DrawerNavigator from './DrawerNavigator';
 import LandingScreen from '../screens/Common/LandingScreen';
 import RedirectScreen from '../screens/Common/Redirect';
 import DateSelectorScreen from '../screens/Common/DateSelector';
+import UpdateSubscribersScreen from '../screens/Alerts/UpdateSubscribers';
+import { useSelector } from 'react-redux';
+import SubscriberDrawerNavigator from './SubscriberNavigator';
 
 const Stack = createNativeStackNavigator()
 
@@ -31,6 +34,7 @@ export const HomeStackNavigator= ()=>{
                     options={{headerTitle:''}}/>
                 <Stack.Screen name='Device Settings' component={DeviceSettingsScreen}/>
                 <Stack.Screen name='Device Alerts' component={DeviceAlertingRulesScreen}/>
+                <Stack.Screen name='Subscribers' component={UpdateSubscribersScreen}/>                
                 <Stack.Screen name='Device History' component={DeviceHistoryScreen}/>
                 <Stack.Screen name='New Alert' component={AddNewAlertScreen}
                     options={( {route} ) => ({
@@ -60,12 +64,13 @@ export const SettingsStackNavigator = () => (
 )
 
 export const AuthStackNavigator = () => {
-    return(
-        <Stack.Navigator>
-            <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
-            <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
-            <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
-            <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
-        </Stack.Navigator>
-    )
+
+        return(
+            <Stack.Navigator>
+                <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
+                <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
+                <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
+            </Stack.Navigator>
+        )
 }

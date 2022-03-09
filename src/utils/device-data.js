@@ -243,7 +243,7 @@ export const allAlerts= [
               "UserName": "Neighbor",
             },
             {
-              "Role": 6,
+              "Role": 3,
               "Subscribed": 1,
               "UserId": 3,
               "UserName": "Care Provider",
@@ -277,7 +277,7 @@ export const allAlerts= [
               "UserName": "Neighbor",
             },
             {
-              "Role": 6,
+              "Role": 3,
               "Subscribed": 1,
               "UserId": 3,
               "UserName": "Care Provider",
@@ -314,7 +314,7 @@ export const allAlerts= [
               "UserName": "Neighbor",
             },
             {
-              "Role": 6,
+              "Role": 3,
               "Subscribed": 0,
               "UserId": 3,
               "UserName": "Care Provider",
@@ -349,7 +349,7 @@ export const allAlerts= [
               "UserName": "Neighbor",
             },
             {
-              "Role": 6,
+              "Role": 3,
               "Subscribed": 1,
               "UserId": 3,
               "UserName": "Care Provider",
@@ -459,71 +459,77 @@ export const allStatusOpts = [
             ],
             Type:13
         },
+        {
+            opts:[
+                {
+                    Conversion:'released',
+                    Status:'0',
+                },
+                {
+                    Conversion:'pressed',
+                    Status:'1',
+                }
+            ],
+            Type:5
+        },
 ]
 
 export const activeAlerts= [
     {
-        AlertId:1,
-        RuleId:1,
-        DeviceId:1,
-        Name:'Contact Sensor',
-        type:1,
-        Location:'front door',
-        Time:'18:00',
-        Conversion:'open',
-        Threshold: '1',
-        AlertAssigned: 'false',
-        HandledByUserName:null,
-        HandledByUserId:null,
-        AssignTime:null,
-        Subscribers: [
-            {
-              "Role": 2,
-              "UserId": 1,
-              "UserName": "Family Member",
-            },
-            {
-              "Role": 4,
-              "UserId": 2,
-              "UserName": "Neighbor",
-            },
-            {
-              "Role": 6,
-              "UserId": 3,
-              "UserName": "Care Provider",
-            },
-        ],
+        "Active": 1,
+        "Conversion": "open",
+        "CreatedOn": "2021-12-22T06:00:51.577Z",
+        "DeviceId": 1,
+        "DeviceStatus": 1,
+        "FirstResponse": "2022-03-09T05:52:32.893Z",
+        "HandledByUserId": 1,
+        Assigned:1,
+        "Handler": {
+          "FirstName": "Amy",
+          "LastName": "Gaskin",
+          "Role": 2,
+          "UserId": 1,
+          "UserName": "familyadmin",
+        },
+        "Id": 1,
+        "Location": "Bedroom",
+        "Name": "Contact Sensor",
+        "ResolvedOn": null,
     },
     {
-        AlertId:2,
-        RuleId:1,
-        DeviceId:1,
-        Name:'Contact Sensor',
-        type:1,
-        Location:'front door',
-        Time:'18:00',
-        Conversion:'open',
-        Threshold: '1',
-        HandledByUserName: 'Neighbor',
-        HandledByUserId:1,
-        AssignTime:'18:05',
-        AlertAssigned: 'true',
-        Subscribers: [
-            {
-              "Role": 2,
-              "UserId": 1,
-              "UserName": "Family Member",
-            },
-            {
-              "Role": 4,
-              "UserId": 2,
-              "UserName": "Neighbor",
-            },
-            {
-              "Role": 6,
-              "UserId": 3,
-              "UserName": "Care Provider",
-            },
-        ],
+        "Active": 1,
+        "Conversion": "pressed",
+        "CreatedOn": "2022-03-08T14:12:10.187Z",
+        "DeviceId": 31,
+        "DeviceStatus": 1,
+        "FirstResponse": null,
+        "HandledByUserId": null,
+        "Handler": null,
+        Assigned:0,
+        "Id": 2,
+        "Location": "Wrist Band",
+        "Name": "Panic Button",
+        "ResolvedOn": null,
     },
+]
+
+export const demoSubscribers = [
+        {
+          "Role": 2,
+          "Subscribed": 1,
+          "UserId": 1,
+          "UserName": "Family Member",
+        },
+        {
+          "Role": 4,
+          "Subscribed": 1,
+          "UserId": 2,
+          "UserName": "Neighbor",
+        },
+        {
+          "Role": 3, 
+          "Subscribed": 1,
+          "UserId": 3,
+          "UserName": "Care Provider",
+        },
 ]

@@ -9,6 +9,7 @@ export const convertToMins = (timestamp) => {
     if (diff>=1) return `${Math.round(diff)} days ago`
     else{
         diff = Math.round((currDate-new Date(timestamp))/3600000)
+        if(diff===1) return `${diff} hr ago`
         if(diff>=1) return `${diff} hrs ago`
         else {
             diff= Math.round(((((currDate-new Date(timestamp))%86400000)%3600000)/60000))

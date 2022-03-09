@@ -100,6 +100,8 @@ const SettingsScreen = ({ navigation, route }) => {
           {errors}</Text>
         }
         {/***** Gateway Info ****/}
+        {currUser.Role!==4 &&
+        <>
         <View style={[styles.card, styles.row]}>
           <Image style={styles.imgIcon}
           source={gateway}/>
@@ -142,6 +144,8 @@ const SettingsScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+        </>
+        }
         {/***** SMS ****/}
         <View style={[styles.card, styles.row,{alignItems:'center'}]}>
           <Text style={[styles.textMuted,{flex:1}]}>
@@ -194,6 +198,7 @@ const SettingsScreen = ({ navigation, route }) => {
           </View>
         </View>
         {/***** New Users ****/}
+        {currUser.Role===2 &&
         <View style={[styles.card, styles.row,{alignItems:'center'}]}>
           <Text style={[styles.textMuted,{flex:1}]}>
             Add Members
@@ -208,6 +213,7 @@ const SettingsScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+        }
       </View>
       {loading && <ActivityIndicator/>}
       {!authenticated && <Subscribe navigation={navigation}/>}
