@@ -4,8 +4,10 @@ import {SafeAreaView, Text, View, ActivityIndicator,
 import styles from '../../../assets/styles'
 import logo from '../../../assets/images/logo.png'
 import axios from 'axios'
-import { setCurrUser, interpretErrorCode } from '../../redux/actions'
+import { interpretErrorCode, setCurrUser } from '../../redux/actions'
 import { useDispatch } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { SET_AUTHENTICATED } from '../../redux/types'
 
 const LoginScreen = ({navigation,route}) => {
     const [name,setName] = useState('')
@@ -19,14 +21,24 @@ const LoginScreen = ({navigation,route}) => {
             setError('')
             setLoading(true)
             axios.post('/login',{name,password})
-            .then(res=>{
+            .then(async(res)=>{
                 setLoading(false)
                 if(res.data.error)
                     setError(res.data.msg)
                 else {
-                    dispatch(setCurrUser(`Bearer ${res.data.token}`))
-                     navigation.navigate({
-                        name:'Enter app'
+                    await AsyncStorage.setItem('@FcsAtHomeToken', res.data.token)
+                    await AsyncStorage.setItem('@FcsAtHomeCurrUserRole', res.data.level.toString())
+                    axios.defaults.headers.common['Authorization'] = res.data.token
+                    console.log('in login screen level set was', res.data.level)
+                    dispatch({type:SET_AUTHENTICATED})
+                    dispatch(setCurrUser())
+                    if(res.data.terms)
+                    navigation.navigate({
+                        name:'Enter app',
+                    })
+                    else
+                    navigation.navigate({
+                        name:'Terms',
                     })
                 }
             })

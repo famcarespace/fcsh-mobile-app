@@ -95,10 +95,7 @@ const SettingsScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
-        { errors!=='' && 
-          <Text style={{color:'tomato'}}>
-          {errors}</Text>
-        }
+        { errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
         {/***** Gateway Info ****/}
         {currUser.Role!==4 &&
         <>

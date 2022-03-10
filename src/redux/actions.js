@@ -1,5 +1,4 @@
 import {
-    SET_AUTHENTICATED,
     SET_UNAUTHENTICATED,
     SET_CURR_USER,
 }from './types'
@@ -14,15 +13,11 @@ export const interpretErrorCode = (code) => {
     return text
 }
 
-export const setCurrUser = (token) => (dispatch) => {
-    AsyncStorage.setItem('@FcsAtHomeToken', token)
-    axios.defaults.headers.common['Authorization'] = token
-    dispatch({type:SET_AUTHENTICATED})
+export const setCurrUser = () => (dispatch) => {
     try{
         axios.get('/user')
-        .then(async(res)=>{
+        .then(res=>{
             //console.log(res.data)
-            await AsyncStorage.setItem('@FcsAtHomeCurrUserRole', res.data.Role.toString())
             dispatch({
                 type: SET_CURR_USER,
                 payload:res.data
@@ -37,9 +32,11 @@ export const setCurrUser = (token) => (dispatch) => {
 export const logoutUser = (navigation, authenticated) => (dispatch) => {
     if(authenticated){
         axios.post('/logout')
-        .then(()=>{
-        AsyncStorage.removeItem('@FcsAtHomeToken')
-        AsyncStorage.removeItem('@FcsAtHomeCurrUserRole')
+        .then(async()=>{
+        await Promise.all([
+            AsyncStorage.removeItem('@FcsAtHomeToken'),
+            AsyncStorage.removeItem('@FcsAtHomeCurrUserRole')
+        ]) 
         delete axios.defaults.headers.common['Authorization']
         dispatch({ type: SET_UNAUTHENTICATED })
         navigation.reset({

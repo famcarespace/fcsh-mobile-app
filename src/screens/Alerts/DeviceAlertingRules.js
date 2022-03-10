@@ -10,6 +10,7 @@ import {MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios'
 import { useSelector } from "react-redux"
 import {allAlerts, allStatusOpts} from "../../utils/device-data"
+import { convert24to12hr } from "../../utils/functions"
 
 const DeviceAlertingRulesScreen = ({ navigation, route }) => {
     const {device} = route.params
@@ -78,8 +79,8 @@ const DeviceAlertingRulesScreen = ({ navigation, route }) => {
             newAlert: false,
             screenTitle: 'Edit Alert'},
         })}>
-            <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
-            <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
+            <Text><Text style={styles.textMuted}>From: </Text>{convert24to12hr(item.StartTime)}</Text>
+            <Text><Text style={styles.textMuted}>To: </Text> {convert24to12hr(item.EndTime)}</Text>
             <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
             <Text>
                 <Text style={styles.textMuted}>Days: </Text>

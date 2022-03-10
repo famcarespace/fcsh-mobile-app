@@ -21,29 +21,26 @@ const App = () => {
   async function cacheResourcesAsync() {
     const image = require('./assets/splash.png')
     return Asset.fromModule(image).downloadAsync()
-  }
+}
 
-  async function isLoggedIn() {
-    try{
-      let token = await AsyncStorage.getItem('@FcsAtHomeToken')
-      if(token){
-        if(typeof store.getState().currUser==='undefined'){
-          console.log('setting user')
-          store.dispatch(setCurrUser(token))
-        } else {
-        console.log('just the token')
-        store.dispatch({type:SET_AUTHENTICATED})
-        axios.defaults.headers.common['Authorization'] = token
-        }
-      }
-      else {
-        store.dispatch({type:SET_UNAUTHENTICATED})
-        axios.defaults.headers.common['Authorization'] = ''
-      }
-    } catch(e) {
-      console.log(e)
+async function isLoggedIn() {
+  try{
+    let token = await AsyncStorage.getItem('@FcsAtHomeToken')
+    if(token){
+      store.dispatch({type:SET_AUTHENTICATED})
+      axios.defaults.headers.common['Authorization'] = token
+      if(typeof store.getState().currUser==='undefined')
+        store.dispatch(setCurrUser())
+    }
+    else {
+      store.dispatch({type:SET_UNAUTHENTICATED})
+      axios.defaults.headers.common['Authorization'] = ''
     }
   }
+  catch(e) {
+    console.log(e)
+  }
+}
 
   useEffect(()=>{
     isLoggedIn()

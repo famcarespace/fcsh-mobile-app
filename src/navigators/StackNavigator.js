@@ -14,15 +14,14 @@ import SmartSwitchScreen from '../screens/Sensors/SmartSwitch'
 import UserInfoScreen from '../screens/Settings/UserInfo';
 import SettingsScreen from '../screens/Settings/Settings';
 import UpdatePasswordScreen from '../screens/Settings/UpdatePassword';
-import LoginScreen from '../screens/Common/Login';
+import LoginScreen from '../screens/Login/Login';
 import AddUsersScreen from '../screens/Settings/AddUsers';
 import DrawerNavigator from './DrawerNavigator';
-import LandingScreen from '../screens/Common/LandingScreen';
-import RedirectScreen from '../screens/Common/Redirect';
+import LandingScreen from '../screens/Login/LandingScreen';
+import RedirectScreen from '../screens/Login/Redirect';
 import DateSelectorScreen from '../screens/Common/DateSelector';
 import UpdateSubscribersScreen from '../screens/Alerts/UpdateSubscribers';
-import { useSelector } from 'react-redux';
-import SubscriberDrawerNavigator from './SubscriberNavigator';
+import AcceptTermsScreen from '../screens/Login/AcceptTerms';
 
 const Stack = createNativeStackNavigator()
 
@@ -63,14 +62,13 @@ export const SettingsStackNavigator = () => (
     </Stack.Navigator>
 )
 
-export const AuthStackNavigator = () => {
+export const AuthStackNavigator = () => (
+        <Stack.Navigator>
+            <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
+            <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
+            <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
+            <Stack.Screen name='Terms' component={AcceptTermsScreen} options={{headerShown:false}}/>            
+            <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
+        </Stack.Navigator>
 
-        return(
-            <Stack.Navigator>
-                <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
-                <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
-                <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
-                <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
-            </Stack.Navigator>
-        )
-}
+)

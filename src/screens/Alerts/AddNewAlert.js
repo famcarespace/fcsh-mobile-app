@@ -8,6 +8,7 @@ import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
 import axios from 'axios'
 import { useSelector } from "react-redux"
+import { convert24to12hr } from "../../utils/functions"
 
 const getCurrTime = () => {
  return (new Date().getHours()+':'+new Date().getMinutes())
@@ -20,7 +21,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   const [to, setTo] = useState(newAlert? getCurrTime:rule.EndTime)
   const [status, setStatus] = useState(newAlert?statusOpts[0].Conversion:rule.Conversion)
   const [days, setDays] = useState(newAlert?['0','0','0','0','0','0','0']:rule.Days)
-  const [subscribers, setSubscribers] = useState(rule.Subscribers)
+  const [subscribers, setSubscribers] = useState(newAlert?[]:rule.Subscribers)
   //  const [timer, setTimer] = useState(newAlert?false:rule.timer)
 //  const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
 //  const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
@@ -60,6 +61,22 @@ const AddNewAlertScreen = ({ navigation, route }) => {
     }
   },[route.params?.selectedTime])
 
+  useEffect(()=>{
+    if(newAlert && authenticated){
+      setLoading(true)
+      axios.get(`/device-subscribers?deviceId=${rule.DeviceId}`)
+      .then(res=>{
+        setSubscribers(res.data)
+        setLoading(false)
+      })
+      .catch(err=>{
+        console.log(err)
+        setErrors('Unable to get data. Try again.')
+        setLoading(false)        
+      })
+    }
+  },[])
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -68,7 +85,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
         onPress={handleSubmit} title="Save" />
       ),
     });
-  }, [navigation, handleSubmit,from,to,status,days, loading/*timer,hrs,mins*/])
+  }, [navigation, handleSubmit,from,to,status,days,subscribers, loading/*timer,hrs,mins*/])
 
   const handleSubmit = () => {
     let complete = true
@@ -146,7 +163,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
     Alert.alert('Delete Alert', '', [
       {
         text: 'Yes',
-        onPress: () => handleDelete,
+        onPress: handleDelete,
         style: 'cancel',
       },
       { text: 'No' },
@@ -185,7 +202,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
               <Tooltip msg='Set a timeframe to check for alerts'/>
             </Text>
             <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
-                <Text>{from} hrs</Text>
+                <Text>{convert24to12hr(from)}</Text>
                 <TouchableOpacity
                   onPress={()=> navigation.navigate({
                     name: 'TimeSelector',
@@ -202,7 +219,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
             <View style={[styles.row, styles.marginBottom,{alignItems:'center'}]}>
             <Text style={[styles.textMuted,{flex:1}]}>End Time</Text>
               <View style={[styles.row, styles.pushRight,{zIndex:-1}]}>
-                <Text>{to} hrs</Text>
+                <Text>{convert24to12hr(to)}</Text>
                 <TouchableOpacity
                   onPress={()=> navigation.navigate({
                     name: 'TimeSelector',

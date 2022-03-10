@@ -1,6 +1,6 @@
 import React,{useState, useLayoutEffect, useEffect} from "react"
 import { View, Text, Pressable,
-  SafeAreaView, Button, ActivityIndicator, Alert} from "react-native"
+  SafeAreaView, Button, ActivityIndicator, Alert, TouchableOpacity} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import {MaterialIcons} from '@expo/vector-icons'
@@ -24,7 +24,6 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
           .then(res=>{
            // console.log(res.data)
             setSubscribers(res.data)
-            setChecked(res.data.map(item=> item.Subscribed))
             setLoading(false)
           })
           .catch(err=>{
@@ -35,13 +34,17 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
         }
         else {
           setSubscribers(demoSubscribers)
-          setChecked(demoSubscribers.map(item=> item.Subscribed))
           setLoading(false)
         }
     }
+
     useEffect(()=>{
         fetchData()
       },[navigation])
+    
+    useEffect(()=>{
+        setChecked(subscribers.map(item=> item.Subscribed))
+    },[subscribers])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -51,13 +54,7 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
             onPress={handleSubmit} title="Save" />
           ),
         });
-      }, [navigation, handleSubmit, loading])
-
-    const handleChange = (key) => {
-        var temp = checked
-        temp[key] = !temp[key]
-        setChecked(temp)
-    }
+      }, [navigation, handleSubmit, loading, checked, subscribers])
 
     const handleSubmit = () => {
         if(authenticated){
@@ -71,9 +68,9 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
             })
             .then(res=>{
                 setSubscribers(res.data)
-                setChecked(res.data.map(item=> item.Subscribed))
                 setLoading(false)
                 Alert.alert('','Subscribers updated')
+                
             })
             .catch(err=>{
                 console.log(err)
@@ -82,10 +79,16 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
             })
         } else {
             setSubscribers(demoSubscribers)
-            setChecked(demoSubscribers.map(item=> item.Subscribed))
             setLoading(false)
         }
-    }      
+    }  
+    
+    const handleChange = (key) => {
+        var temp = checked
+        temp[key] = temp[key]===1?0:1
+        setChecked([...temp])
+
+    }
 
     return (
     <SafeAreaView style={styles.mainContentContainer}>
@@ -97,17 +100,17 @@ const UpdateSubscribersScreen = ({navigation, route }) => {
                     <View key={key} style={[styles.row, styles.marginBottom]}>
                     <Text style={{flex:1}}>{user.UserName}</Text>
                         <View style={[styles.row, styles.pushRight]}>
-                            <Pressable
+                            <TouchableOpacity
                                 disabled={loading || user.Role===2}
                                 key={key}
                                 onPress={()=>handleChange(key)}>
-                                {checked[key]?
+                                {checked[key]===1?
                                     <MaterialIcons name='check-box' size={24} color='dodgerblue'/>
                                     :   
                                     <MaterialIcons name='check-box-outline-blank'
                                     size={24} color='lightgrey'/>
                                 }
-                            </Pressable>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 ))

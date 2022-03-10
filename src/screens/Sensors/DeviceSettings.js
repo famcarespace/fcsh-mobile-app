@@ -50,14 +50,13 @@ const DeviceSettingsScreen = ({navigation, route }) => {
           ),
         });
       }, [navigation, handleSubmit, loading])
-
     return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
         <Text style={styles.marginBottom}>Give your device a relevant location</Text>
         <View style={styles.card}>
             <Text style={styles.cardHeader}>{device.Name}</Text>
-            {device.Battery &&
+            {device.Battery!==null &&
                 <Text style={styles.marginBottom}>
                     Battery: {device.Battery}%
                 </Text>

@@ -5,8 +5,6 @@ import {
     SET_UNAUTHENTICATED,
     GET_DEVICE_LIST,
     UPDATE_DEVICE_STATUS,
-    UPDATE_HSV_SETTINGS,
-    POST_DEVICE_SETTINGS,
   } from './types';
   
   const initialState = {
@@ -55,29 +53,6 @@ import {
             return {
               ...state,
               deviceList: newList
-            }
-          case UPDATE_HSV_SETTINGS:
-            var newList = state.deviceList
-            newList.forEach(item => {
-              if(item.MacAddr === action.payload.deviceMac){
-                item.Hue = action.payload.hue
-                item.Sat = action.payload.sat
-                item.Bright = action.payload.bright
-              }
-            });
-            return {
-              ...state,
-              deviceList: newList
-            }
-        case POST_DEVICE_SETTINGS:
-            var newList = state.deviceList
-            newList.forEach(item => {
-                if(item.DeviceId === action.payload.deviceId){
-                item.Location = action.payload.location
-            }})
-            return {
-                ...state,
-                deviceList: newList
             }
       default:
         return state;

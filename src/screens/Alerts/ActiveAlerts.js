@@ -16,10 +16,14 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
     const [allActiveAlerts, setAllActiveAlerts] = useState([])
     const [loading, setLoading] = useState(true)
     const [errors, setErrors] = useState('')
-    const {authenticated} = useSelector(state=>state)
+    const {authenticated, currUser} = useSelector(state=>state)
 
     useEffect(()=>{
       fetchData()
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchData()
+      })
+      return unsubscribe
     },[])
 
     const fetchData = () =>{
@@ -104,8 +108,9 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
 
     const handlePress = (item)=> {
         if(item.HandledByUserId!==null){
-            //if handledByUserId === currentUserId
-            Alert.alert('Take Action','',[
+            if (item.HandledByUserId === currUser.UserId)
+            {
+              Alert.alert('Take Action','',[
                 {
                     text: 'Resolve',
                     onPress: () => handleResolve(item.Id),
@@ -117,7 +122,10 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
                 {
                     text: 'Cancel',
                 },
-            ])
+              ])
+            } else {
+              Alert.alert('','Alert already assigned')
+            }
         } else {
             Alert.alert('Take Action','',[
                 {

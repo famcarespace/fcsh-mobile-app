@@ -8,10 +8,11 @@ import {allAlerts} from "../../utils/device-data"
 import {MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios'
 import { useSelector } from "react-redux"
+import { convert24to12hr } from "../../utils/functions"
 
 const AllAlertingRulesScreen = ({ navigation, route }) => {
     const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
-    const width = Dimensions.get('window').width
+    const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
     const [allActiveAlerts, setAllActiveAlerts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -20,6 +21,10 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
 
     useEffect(()=>{
       fetchData()
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchData()
+      })
+      return unsubscribe      
     },[])
 
     const fetchData = () =>{
@@ -48,8 +53,8 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
       <View style={[styles.card, {width:width}]}>
           <Text style={styles.h4}>{item.Name}</Text>
           <Text style={[styles.textMuted, styles.marginBottom]}>{item.Location}</Text>
-          <Text><Text style={styles.textMuted}>From: </Text>{item.StartTime} hrs</Text>
-          <Text><Text style={styles.textMuted}>To: </Text> {item.EndTime} hrs</Text>
+          <Text><Text style={styles.textMuted}>From: </Text>{convert24to12hr(item.StartTime)}</Text>
+          <Text><Text style={styles.textMuted}>To: </Text> {convert24to12hr(item.EndTime)}</Text>
           <Text><Text style={styles.textMuted}>Status: </Text> {item.Conversion}</Text> 
           <Text>
               <Text style={styles.textMuted}>Days: </Text>
@@ -81,7 +86,9 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         {errors!=='' && <Text>{errors}</Text>}
         { loading? <ActivityIndicator/>:
-            <FlatList data={allActiveAlerts}
+            <FlatList 
+              style={{height:height-30}}
+              data={allActiveAlerts}
               renderItem={renderItem}
               keyExtractor={rule => rule.RuleId}
               ListEmptyComponent={<Text>No alerts set</Text>}

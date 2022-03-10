@@ -22,18 +22,16 @@ export const convertToMins = (timestamp) => {
     }
 }
 
-export const getLabel = (type) => {
-    switch (type){
-        case 1:
-            return 'Open'
-        case 4:
-            return 'Movement'
-        case 6:
-            return 'Threshold'
-        case 9:
-            return 'Vibration'
-        default: return 'On'
+export const convert24to12hr = (value) => {
+    var [hrs,mins] = value.split(':')
+    var part = ' AM'
+    if(hrs>12){
+        part = ' PM'
+        hrs = hrs-12
+        if(hrs<10) hrs = '0'+hrs
     }
+    return hrs.toString().concat(':',mins.toString(),part)
+
 }
 
 export const getIcon = (cat) => {
