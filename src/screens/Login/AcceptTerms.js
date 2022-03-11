@@ -29,7 +29,7 @@ const AcceptTermsScreen = ({navigation,route}) => {
     return(
         <SafeAreaView style={styles.mainContentContainer}>
             <View style={[styles.innerContainer,{flex:1}]}>
-                <Text style={styles.h4, styles.marginBottom}>Privacy Policy and Terms</Text>
+                <Text style={[styles.h4, styles.marginBottom]}>Privacy Policy and Terms</Text>
                 <TouchableOpacity 
                     onPress={handlePressureButtonAsync}>
                     <Text style={{color:'dodgerblue'}}>Click here to read the policy and terms</Text> 
@@ -44,7 +44,7 @@ const AcceptTermsScreen = ({navigation,route}) => {
                             size={24} color='lightgrey'/>
                         }
                     </TouchableOpacity>
-                    <Text>I have read and aceept the terms</Text>
+                    <Text>I have read and accept the terms</Text>
                 </View>
             </View>
 

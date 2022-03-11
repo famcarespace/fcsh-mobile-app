@@ -107,7 +107,7 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         <View style={styles.centered}>
           <View style={styles.card}>
             <Text style={styles.marginBottom}>Notifications are sent to registered email/phone when an alert is triggered.</Text>
-            <Text style={styles.marginBottom}>For example, you'd like to receive a notification if front door remains open for more than 20 mins at night</Text>
+            <Text style={styles.marginBottom}>For example, you'd like to receive a notification if front door remains open at night</Text>
             <Text style={styles.marginBottom}>To do this, place a contact sensor on front door and set up an alert as follows: </Text>
             <Text><Text style={styles.textMuted}>Start Time: </Text> 9:00pm</Text>
             <Text><Text style={styles.textMuted}>End Time: </Text> 7:00am</Text>

@@ -13,8 +13,8 @@ import store from './src/redux/store'
 import { Provider } from "react-redux"
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, UPDATE_DEVICE_STATUS } from './src/redux/types'
 import { setCurrUser } from './src/redux/actions';
-//axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
-axios.defaults.baseURL = 'http://localhost:5000/iot'
+axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
+//axios.defaults.baseURL = 'http://localhost:5000/iot'
 
 const App = () => {
   const [isReady, setIsReady] = useState(false)

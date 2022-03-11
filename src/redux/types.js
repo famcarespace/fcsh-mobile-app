@@ -6,6 +6,7 @@ export const SET_CURR_USER = 'SET_CURR_USER'
 // Device reducer types
 export const GET_DEVICE_LIST = 'GET_DEVICE_LIST'
 export const UPDATE_DEVICE_STATUS = 'UPDATE_DEVICE_STATUS'
+export const UPDATE_DEVICE_SETTINGS = 'UPDATE_DEVICE_SETTINGS'
 
 //Gateway reducer types
 export const SET_GATEWAY_CONN = 'SET_GATEWAY_CONN'

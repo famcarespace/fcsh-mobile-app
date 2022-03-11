@@ -47,7 +47,6 @@ const DashboardScreen = ({ navigation, route }) =>{
   }
 
   const renderItem = ({item}) => (
-    item.DeviceCount!==0 &&
     <TouchableOpacity
         style={[styles.card, styles.row,{width:width}]}
         onPress={()=> navigation.navigate({
@@ -61,7 +60,7 @@ const DashboardScreen = ({ navigation, route }) =>{
         <Text style={[styles.h2]}>
           {item.DeviceCount}
         </Text>
-        <Text>{item.Category}{item.DeviceCount>1?'s':''}</Text> 
+        <Text>{item.Category}{item.DeviceCount===1?'':'s'}</Text> 
        </View>
     </TouchableOpacity>
   )

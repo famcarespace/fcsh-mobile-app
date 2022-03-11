@@ -5,6 +5,7 @@ import {
     SET_UNAUTHENTICATED,
     GET_DEVICE_LIST,
     UPDATE_DEVICE_STATUS,
+    UPDATE_DEVICE_SETTINGS
   } from './types';
   
   const initialState = {
@@ -54,6 +55,16 @@ import {
               ...state,
               deviceList: newList
             }
+        case UPDATE_DEVICE_SETTINGS:
+          var newList = state.deviceList
+          newList.forEach(item => {
+              if(item.DeviceId === action.payload.deviceId){
+              item.Location = action.payload.location
+          }})
+          return {
+              ...state,
+              deviceList: newList
+          }
       default:
         return state;
     }

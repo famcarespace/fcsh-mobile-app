@@ -32,8 +32,8 @@ const UpdatePasswordScreen = ({navigation, route }) => {
             if(authenticated){
                 setLoading(true)
                 axios.put('/update-login',{
-                    old:password.old,
-                    current:password.newPass
+                    old:old,
+                    current:newPass
                 })
                 .then(()=>{
                     setLoading(false)

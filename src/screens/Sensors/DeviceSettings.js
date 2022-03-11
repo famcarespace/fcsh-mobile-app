@@ -5,7 +5,7 @@ import Subscribe from "../../components/Subscribe"
 import Tooltip from "../../components/Tooltip"
 import axios from 'axios'
 import { useSelector, useDispatch } from "react-redux"
-import { POST_DEVICE_SETTINGS } from "../../redux/types"
+import { UPDATE_DEVICE_SETTINGS } from "../../redux/types"
 
 const DeviceSettingsScreen = ({navigation, route }) => {
     const {device} = route.params
@@ -27,13 +27,14 @@ const DeviceSettingsScreen = ({navigation, route }) => {
                 axios.put('/device-settings/', settings)
                 .then(res=>{
                     dispatch({
-                        type:POST_DEVICE_SETTINGS,
+                        type:UPDATE_DEVICE_SETTINGS,
                         payload: settings
                     })
                     setLocation(res.data)
                     setLoading(false)
                 })
-                .catch(()=>{
+                .catch((err)=>{
+                    console.log(err)
                     setErrors('Unable to update. Try again.')
                     setLoading(false)
                 })

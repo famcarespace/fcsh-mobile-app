@@ -66,10 +66,11 @@ const SettingsScreen = ({ navigation, route }) => {
         setLoading(true)
         axios
         .get('/user')
-        .then(res=>{ 
+        .then(res=>{
+          console.log(res.data) 
             setCurrUser(res.data)
             setTimezone(res.data.Timezone)
-            setSms(res.data.SmsAlert)
+            setSms(res.data.smsAlert)
             setLoading(false)
             setErrors('')
         })
