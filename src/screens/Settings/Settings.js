@@ -43,7 +43,7 @@ const SettingsScreen = ({ navigation, route }) => {
           axios.put('/update-timezone',newSettings)
           .then(res=>{
             setTimezone(res.data.timezone)
-            setSms(res.data.smsAlert)
+            setSms(res.data.SmsAlert)
             setLoading(false)
             setErrors('')
           })
@@ -67,10 +67,8 @@ const SettingsScreen = ({ navigation, route }) => {
         axios
         .get('/user')
         .then(res=>{
-          console.log(res.data) 
-            setCurrUser(res.data)
             setTimezone(res.data.Timezone)
-            setSms(res.data.smsAlert)
+            setSms(res.data.SmsAlert)
             setLoading(false)
             setErrors('')
         })

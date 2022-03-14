@@ -29,7 +29,6 @@ const LoginScreen = ({navigation,route}) => {
                     await AsyncStorage.setItem('@FcsAtHomeToken', res.data.token)
                     await AsyncStorage.setItem('@FcsAtHomeCurrUserRole', res.data.level.toString())
                     axios.defaults.headers.common['Authorization'] = res.data.token
-                    console.log('in login screen level set was', res.data.level)
                     dispatch({type:SET_AUTHENTICATED})
                     dispatch(setCurrUser())
                     if(res.data.terms)

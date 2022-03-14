@@ -4,7 +4,6 @@ import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
 import axios from 'axios'
 import {useSelector, useDispatch} from 'react-redux'
-import { logoutUser } from "../../redux/actions"
 
 const UpdatePasswordScreen = ({navigation, route }) => {
     const [old, setOld] = useState('')
@@ -13,7 +12,6 @@ const UpdatePasswordScreen = ({navigation, route }) => {
     const {authenticated} = useSelector(state=>state)
     const [errors,setErrors] = useState('')
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -24,6 +22,7 @@ const UpdatePasswordScreen = ({navigation, route }) => {
     }, [navigation, handleSubmit,old,newPass,retype])
 
     const handleSubmit = () => {
+        setErrors('')
         if(old==='' || newPass===''||retype==='')
             setErrors('all fields are required')
         else if(newPass!==retype)
@@ -37,7 +36,7 @@ const UpdatePasswordScreen = ({navigation, route }) => {
                 })
                 .then(()=>{
                     setLoading(false)
-                    dispatch(logoutUser(navigation))
+                    navigation.navigate({name:'Logout'})
                 })
                 .catch(err=>{
                     console.log(err)
@@ -51,7 +50,9 @@ const UpdatePasswordScreen = ({navigation, route }) => {
     return (
     <SafeAreaView style={styles.mainContentContainer}>
     <View style={styles.innerContainer}>
-       <View style={styles.card}>
+        <View style={styles.card}>
+        <Text>You will be logged out after updating password. Login again with new password.</Text>
+       
             <TextInput
                 style={styles.input}
                 onChangeText={setOld}
