@@ -22,10 +22,9 @@ const SettingsScreen = ({ navigation, route }) => {
     'US/Hawaii',
     'GMT']
     const [result, setResult] = React.useState(null)
-    const {authenticated} = useSelector(state=>state)
+    const {authenticated, currUser} = useSelector(state=>state)
     const [errors,setErrors] = useState('')
     const [loading, setLoading] = useState(true)
-    const [currUser, setCurrUser] = useState({})
 
     useEffect(()=>{
       if(route.params?.selected){
@@ -79,7 +78,8 @@ const SettingsScreen = ({ navigation, route }) => {
         })
       }
       else {
-        setCurrUser(guestUser)
+        setTimezone(guestUser.Timezone)
+        setSms(guestUser.SmsAlert)
         setLoading(false)
       }
     },[])
@@ -108,7 +108,7 @@ const SettingsScreen = ({ navigation, route }) => {
             </Text>
             <View style={{zIndex:-1}}>
               <Text style={styles.textMuted}>
-                30:ae:7b:f1:e3:65
+                {currUser.MacAddr}
               </Text>
               <View>
                 <Text style={styles.textMuted}>IP: </Text>

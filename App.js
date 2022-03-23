@@ -11,7 +11,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import store from './src/redux/store'
 import { Provider } from "react-redux"
-import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, UPDATE_DEVICE_STATUS } from './src/redux/types'
+import { ADD_ALERT, REMOVE_ALERT, SET_AUTHENTICATED, SET_UNAUTHENTICATED, UPDATE_ALERT, UPDATE_DEVICE_STATUS } from './src/redux/types'
 import { setCurrUser } from './src/redux/actions';
 axios.defaults.baseURL = 'http://fcsh.azurewebsites.net/iot'
 //axios.defaults.baseURL = 'http://localhost:5000/iot'
@@ -29,7 +29,7 @@ async function isLoggedIn() {
     if(token){
       store.dispatch({type:SET_AUTHENTICATED})
       axios.defaults.headers.common['Authorization'] = token
-      if(typeof store.getState().currUser==='undefined')
+      if(typeof store.getState().currUser==='undefined' || Object.keys(store.getState().currUser).length===0)
         store.dispatch(setCurrUser())
     }
     else {
@@ -45,22 +45,40 @@ async function isLoggedIn() {
   useEffect(()=>{
     isLoggedIn()
     const socket = io('http://fcsh.azurewebsites.net')
-       //const socket = io()
-        socket.on('connect', ()=> {
-            console.log(socket.id)
-        })
-        socket.on('disconnect',()=> console.log('disconnected'))
+    //const socket = io('http://localhost:5000')
+    socket.on('connect', ()=> {
+        console.log(socket.id)
+    })
+    socket.on('disconnect',(reason)=> console.log(reason))
 
-        socket.on('new message',data=>{
-            store.dispatch({
-                type: UPDATE_DEVICE_STATUS,
-                payload:data
-            })
+    socket.on('new-message',data=>{
+        store.dispatch({
+            type: UPDATE_DEVICE_STATUS,
+            payload:data
         })
+    })
 
-        socket.on('alert', data=>{
-            console.log(data)
+    socket.on('new-alert', data=>{
+        store.dispatch({
+          type: ADD_ALERT,
+          payload: data
         })
+    })
+    socket.on('resolve-alert', data=>{
+      console.log('alert resolved ',data)
+      store.dispatch({
+        type:REMOVE_ALERT,
+        payload: data
+      })
+    })
+    socket.on('update-alert', data=>{
+      console.log(data)
+      store.dispatch({
+        type:UPDATE_ALERT,
+        payload:data
+      })
+    })
+      
   },[])
 
   if(!isReady) {

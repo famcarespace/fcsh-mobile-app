@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react"
+import React,{useState, useEffect, useLayoutEffect} from "react"
 import {Text, TouchableOpacity,
 SafeAreaView, FlatList, ActivityIndicator,
 Dimensions, View} from "react-native"
@@ -9,40 +9,21 @@ import {useSelector, useDispatch} from 'react-redux'
 import { GET_DEVICE_LIST } from "../../redux/types"
 import axios from 'axios'
 import { convertToMins } from "../../utils/functions"
+import NotificationsIcon from "../../components/NotificationsIcon"
 
 const GroupedStatus = ({ navigation, route }) =>{
-  const { type } = route.params
+  //const { type } = route.params
   const {width, height} = Dimensions.get('window')
   const dispatch = useDispatch()
   const {deviceList, authenticated} = useSelector(state=>state)
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState('')
-  
-  var redirectScreen=''
-  var screenTitle=''
-  switch (type){
-    case 'Sensor':
-      redirectScreen='Device Settings'
-      screenTitle='Settings'
-      break;
-    case 'Smart Bulb':
-      redirectScreen='Smart Bulb'
-      screenTitle='Smart Bulb'
-      break;
-    case 'Smart Plug':
-      redirectScreen='Smart Bulb'
-      screenTitle='Smart Plug'
-      break;
-    case 'Smart Switch':
-      redirectScreen='Smart Switch'
-      screenTitle='Smart Switch'
-  }
 
   const fetchData = () => {
     if(authenticated){
       setLoading(true)
       axios
-      .get(`/device-list-by-type?cat=${type}`)
+      .get(`/device-list-by-type?cat=all`)
       .then(res=>{
           setErrors('')
           dispatch({
@@ -58,10 +39,9 @@ const GroupedStatus = ({ navigation, route }) =>{
       })
     }
     else{
-      let devices = sensors.filter(item=> item.cat===type)
       dispatch({
         type:GET_DEVICE_LIST,
-        payload:devices
+        payload:sensors
       })
       setLoading(false)
     }
@@ -69,9 +49,36 @@ const GroupedStatus = ({ navigation, route }) =>{
 
   useEffect(() => {
     fetchData()
-  }, [type])
+  }, [])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <NotificationsIcon navigation={navigation}/>
+      ),
+    });
+  }, [navigation])
 
   const renderItemSensor = ({item}) => {
+    var redirectScreen=''
+    var screenTitle=''
+    switch (item.Category){
+      case 'Sensor':
+        redirectScreen='Device Settings'
+        screenTitle='Settings'
+        break;
+      case 'Smart Bulb':
+        redirectScreen='Smart Bulb'
+        screenTitle='Smart Bulb'
+        break;
+      case 'Smart Plug':
+        redirectScreen='Smart Bulb'
+        screenTitle='Smart Plug'
+        break;
+      case 'Smart Switch':
+        redirectScreen='Smart Switch'
+        screenTitle='Smart Switch'
+    }
     return(
     <TouchableOpacity
         style={[styles.card, styles.row, {width:width}]}
@@ -102,10 +109,13 @@ const GroupedStatus = ({ navigation, route }) =>{
   return (
     <SafeAreaView style={styles.mainContentContainer}>
       <View style={styles.innerContainer}>
+        {!authenticated && 
+          <Text style={styles.marginBottom}>List of sensors for the demonstration home.</Text>
+        }
         {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
         {loading? <ActivityIndicator/>:
           <FlatList 
-            style={{height:height-30}}
+            //style={{minHeight:height}}
             data={deviceList}
             renderItem={renderItemSensor}
             keyExtractor={item => item.DeviceId}

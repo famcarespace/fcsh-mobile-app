@@ -14,7 +14,7 @@ import { convert24to12hr } from "../../utils/functions"
 
 const DeviceAlertingRulesScreen = ({ navigation, route }) => {
     const {device} = route.params
-    const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sa','Su']
+    const weekdays = ['Su','Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sa']
     const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
     const [deviceAlerts, setDeviceAlerts] = useState([])

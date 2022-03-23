@@ -25,7 +25,7 @@ const AddNewAlertScreen = ({ navigation, route }) => {
   //  const [timer, setTimer] = useState(newAlert?false:rule.timer)
 //  const [hrs, setHrs] = useState(newAlert?'00':rule.duration.hrs)
 //  const [mins, setMins] = useState(newAlert?'00':rule.duration.mins)
-  const weekdays = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat','Sun']
+  const weekdays = ['Sun','Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat']
   const [errors, setErrors] = useState('')
   const [loading, setLoading] = useState(false)
   const {authenticated} = useSelector(state=> state)

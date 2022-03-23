@@ -1,7 +1,7 @@
 export const sensors = [
     //contact sensor
     {
-        cat:'Sensor',
+        "Category":'Sensor',
         "Battery": 85,
         "Bright": null,
         "Conversion": "open",
@@ -9,7 +9,7 @@ export const sensors = [
         "Gateway": 1,
         "Hue": null,
         "Humidity": null,
-        "Location": "Fromt Door",
+        "Location": "Front Door",
         "MacAddr": "00155f000cd8ddfd",
         "Name": "Contact Sensor",
         "SS1": null,
@@ -25,7 +25,7 @@ export const sensors = [
     },
     //motion sensor
     {
-        cat:'Sensor',
+        "Category":'Sensor',
         "Battery": 40,
         "Bright": null,
         "Conversion": "no occupancy",
@@ -49,7 +49,7 @@ export const sensors = [
     },
     //water leak sensor
     {
-        cat:'Sensor',
+        "Category":'Sensor',
         "Battery": 100,
         "Bright": null,
         "Conversion": "no leakage",
@@ -73,7 +73,7 @@ export const sensors = [
     },
     //panic button
     {
-        cat:'Sensor',
+        "Category":'Sensor',
         "Battery": 40,
         "Bright": null,
         "Conversion": "Off",
@@ -97,7 +97,7 @@ export const sensors = [
     },
     //Smart Bulb
     {
-        cat:'Smart Bulb',
+        "Category":'Smart Bulb',
         "Battery": null,
         "Bright": 69,
         "Conversion": "off",
@@ -121,7 +121,7 @@ export const sensors = [
     },
     //smart bulb
     {
-        cat:'Smart Bulb',
+        "Category":'Smart Bulb',
         "Battery": null,
         "Bright": 69,
         "Conversion": "on",
@@ -145,7 +145,7 @@ export const sensors = [
     },
     //smart plug
     {
-        cat:'Smart Plug',
+        "Category":'Smart Plug',
         "Battery": null,
         "Bright": null,
         "Conversion": "On",
@@ -167,30 +167,6 @@ export const sensors = [
         "lastMessageTime": "2022-01-17T15:20:28.433Z",
         customAlerts:true
     },
-    //smart switch
-    {
-        cat:'Smart Switch',
-        "Battery": null,
-        "Bright": null,
-        "Conversion": "On",
-        "DeviceId": 33,
-        "Gateway": 1,
-        "Hue": null,
-        "Humidity": null,
-        "Location": "Master Bedroom",
-        "MacAddr": "gf34rr5434eet6",
-        "Name": "SmartSwitch 3",
-        "SS1": "On",
-        "SS2": "Off",
-        "SS3": "On",
-        "Sat": null,
-        "Temp": null,
-        "Type": 12,
-        "isActive": true,
-        "lastMessage": "1",
-        "lastMessageTime": "2021-12-24T06:07:35.770Z",
-        customAlerts:true
-    },
 ]
 
 export const overview = [
@@ -206,10 +182,6 @@ export const overview = [
         Category: 'Smart Plug',
         DeviceCount:1,
     },
-   /* {
-        Category: 'Smart Switch',
-        DeviceCount:1,
-    },*/
 ]
 
 export const allAlerts= [
@@ -474,7 +446,7 @@ export const allStatusOpts = [
         },
 ]
 
-export const activeAlerts= [
+export const activeAlertsDemo= [
     {
         "Active": 1,
         "Conversion": "open",

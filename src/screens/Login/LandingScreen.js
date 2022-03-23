@@ -59,7 +59,7 @@ The ultimate platform designed for seniors aging in place at home.`,
     componentDidMount(){
         if(this.props.authenticated){
             this.props.navigation.navigate({
-                name:'Enter app'
+                name:'Enter App'
             })
         }
     }
@@ -68,7 +68,7 @@ The ultimate platform designed for seniors aging in place at home.`,
 
         if(index===3){
             this.props.navigation.navigate({
-                name:'Redirect'
+                name:'Enter App'
             })
         }
         else this.setState({currentImage: index});

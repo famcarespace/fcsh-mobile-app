@@ -41,7 +41,7 @@ export const logoutUser = (navigation, authenticated) => (dispatch) => {
         dispatch({ type: SET_UNAUTHENTICATED })
         navigation.reset({
             index:0,
-            routes:[{name:'Landing Screen'}]
+            routes:[{name:'Redirect'}]
         })
         })
         .catch(err=> {
@@ -51,7 +51,7 @@ export const logoutUser = (navigation, authenticated) => (dispatch) => {
     } else {
         navigation.reset({
             index:0,
-            routes:[{name:'Landing Screen'}]
+            routes:[{name:'Redirect'}]
         }) 
     }
 }

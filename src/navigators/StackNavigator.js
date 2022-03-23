@@ -28,9 +28,8 @@ const Stack = createNativeStackNavigator()
 export const HomeStackNavigator= ()=>{
         return(
             <Stack.Navigator>
-                <Stack.Screen name='DevicesStack' component={DashboardScreen} options={{headerShown:false}}/>
-                <Stack.Screen name='Grouped Status' component={GroupedStatusScreen}
-                    options={{headerTitle:''}}/>
+                {/*<Stack.Screen name='DevicesStack' component={DashboardScreen} options={{headerShown:false}}/>*/}
+                <Stack.Screen name='Device List' component={GroupedStatusScreen}/>
                 <Stack.Screen name='Device Settings' component={DeviceSettingsScreen}/>
                 <Stack.Screen name='Device Alerts' component={DeviceAlertingRulesScreen}/>
                 <Stack.Screen name='Subscribers' component={UpdateSubscribersScreen}/>                
@@ -64,11 +63,11 @@ export const SettingsStackNavigator = () => (
 
 export const AuthStackNavigator = () => (
         <Stack.Navigator>
-            <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
             <Stack.Screen name='Redirect' component={RedirectScreen} options={{headerShown:false}}/>
             <Stack.Screen name='Login' component={LoginScreen} options={{headerTitle:''}}/>
+            <Stack.Screen name='Landing Screen' component={LandingScreen} options={{headerShown:false}}/>
             <Stack.Screen name='Terms' component={AcceptTermsScreen} options={{headerShown:false}}/>            
-            <Stack.Screen name='Enter app' component={DrawerNavigator} options={{headerShown:false}}/>
+            <Stack.Screen name='Enter App' component={DrawerNavigator} options={{headerShown:false}}/>
         </Stack.Navigator>
 
 )

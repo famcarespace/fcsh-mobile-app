@@ -11,7 +11,7 @@ import { useSelector } from "react-redux"
 import { convert24to12hr } from "../../utils/functions"
 
 const AllAlertingRulesScreen = ({ navigation, route }) => {
-    const weekdays = ['M', 'T', 'W', 'Th', 'F', 'Sa','Su']
+    const weekdays = ['Su','M', 'T', 'W', 'Th', 'F', 'Sa']
     const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
     const [allActiveAlerts, setAllActiveAlerts] = useState([])
@@ -87,7 +87,7 @@ const AllAlertingRulesScreen = ({ navigation, route }) => {
         {errors!=='' && <Text>{errors}</Text>}
         { loading? <ActivityIndicator/>:
             <FlatList 
-              style={{height:height-30}}
+              //style={{height:height-40}}
               data={allActiveAlerts}
               renderItem={renderItem}
               keyExtractor={rule => rule.RuleId}

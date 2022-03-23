@@ -33,7 +33,7 @@ const LoginScreen = ({navigation,route}) => {
                     dispatch(setCurrUser())
                     if(res.data.terms)
                     navigation.navigate({
-                        name:'Enter app',
+                        name:'Enter App',
                     })
                     else
                     navigation.navigate({
@@ -44,6 +44,7 @@ const LoginScreen = ({navigation,route}) => {
             .catch(err=>{
                 console.log(err)
                 if (err.response?.status) setError(interpretErrorCode(err.response.status))
+                else setError('Unable to login at the moment')
                 setLoading(false)
             })
         }   

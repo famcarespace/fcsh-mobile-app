@@ -4,19 +4,20 @@ import { View, Text, Dimensions,
   Pressable, Modal, TouchableOpacity, Alert} from "react-native"
 import styles from "../../../assets/styles"
 import Subscribe from "../../components/Subscribe"
-import {activeAlerts} from "../../utils/device-data"
+import {activeAlertsDemo} from "../../utils/device-data"
 import {MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios'
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { convertToMins } from "../../utils/functions"
+import { REMOVE_ALERT, SET_ACTIVE_ALERTS, UPDATE_ALERT } from "../../redux/types"
 
 const ActiveAlertsScreen = ({ navigation, route }) => {
+    const {authenticated, currUser, activeAlerts} = useSelector(state=>state)
+    const dispatch = useDispatch()
     const {width, height} = Dimensions.get('window')
     const [modalOpen, setModalOpen] = useState(false)
-    const [allActiveAlerts, setAllActiveAlerts] = useState([])
     const [loading, setLoading] = useState(true)
     const [errors, setErrors] = useState('')
-    const {authenticated, currUser} = useSelector(state=>state)
 
     useEffect(()=>{
       fetchData()
@@ -27,13 +28,14 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
     },[])
 
     const fetchData = () =>{
-      setLoading(true)
       setErrors('')
       if(authenticated){
+        setLoading(true)
         axios.get('/active-alerts')
         .then(res=>{
-          //console.log(res.data)
-          setAllActiveAlerts(res.data)
+          dispatch({
+            type:SET_ACTIVE_ALERTS,
+            payload: res.data})
           setLoading(false)
         })
         .catch(err=>{
@@ -41,69 +43,71 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
           setErrors('Unable to get data. Try again.')
           setLoading(false)
         })
-      }
-      else {
-        setAllActiveAlerts(activeAlerts)
+      }    
+      else{
+        dispatch({
+          type:SET_ACTIVE_ALERTS,
+          payload:activeAlertsDemo
+        })
         setLoading(false)
       }
     }
 
     const handlePick = (id) =>{
-      setLoading(true)
       setErrors('')
       if(authenticated){
+        setLoading(true)
         axios.put(`/pick-alert?alertId=${id}`)
         .then(()=>{
-          fetchData()
+          setLoading(false)
           Alert.alert('','Alert assigned to you. Thanks!')
         })
         .catch(err=>{
           console.log(err)
           setErrors('Action failed. Try again.')
+          setLoading(false)
         })
       }
-      else{
-      setLoading(false)
-      Alert.alert('','Alert assigned to you. Thanks!')
-      }
+      else
+        Alert.alert('','Alert assigned to you. Thanks!')
     }
 
     const handleUnpick = (id) =>{
-      setLoading(true)
       setErrors('')
       if(authenticated){
+        setLoading(true)
         axios.put(`/unpick-alert?alertId=${id}`)
         .then(()=>{
-          fetchData()
+          setLoading(false)
           Alert.alert('','Alert unassigned')
         })
         .catch(err=>{
           console.log(err)
           setErrors('Action failed. Try again.')
+          setLoading(false)
         })
-      } else{
-        setLoading(false)
+      } 
+      else
         Alert.alert('','Alert unassigned')
-      }
     }
 
     const handleResolve = (id) =>{
-      setLoading(true)
       setErrors('')
       if(authenticated){
+        setLoading(true)
         axios.put(`/resolve-alert?alertId=${id}`)
         .then(()=>{
-          fetchData()
+          setLoading(false)
           Alert.alert('','Alert resolved. Thanks!')
         })
         .catch(err=>{
           console.log(err)
           setErrors('Action failed. Try again.')
+          setLoading(false)
         })
-      } else {
-      setLoading(false)
-      Alert.alert('','Alert resolved. Thanks!')
-      }
+      } 
+      else
+        Alert.alert('','Alert resolved. Thanks!')
     }
 
     const handlePress = (item)=> {
@@ -164,11 +168,11 @@ const ActiveAlertsScreen = ({ navigation, route }) => {
           <MaterialIcons name='info-outline' color='dodgerblue' size={20}/>
           <Text> How to respond to alerts?</Text>
         </TouchableOpacity>
-        {errors!=='' && <Text>{errors}</Text>}
+        {errors!=='' && <Text style={{color:'tomato'}}>{errors}</Text>}
         { loading? <ActivityIndicator/>:
             <FlatList 
-              style={{height:height-40}}
-              data={allActiveAlerts}
+              //style={{height:height-40}}
+              data={activeAlerts}
               renderItem={renderItem}
               keyExtractor={rule => rule.Id}
               ListEmptyComponent={<Text>All well here</Text>}

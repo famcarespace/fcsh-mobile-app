@@ -20,8 +20,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier":"com.familycarespace.familyhomeportal",
-      "buildNumber":"1.0.0",
+      "bundleIdentifier":"com.familycarespace.homeportal",
+      "buildNumber":"2.0.0",
       "infoPlist": {}
     },
     "android": {
@@ -30,7 +30,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package":"com.familycarespace.familyhomeportal",
-      "versionCode":1,
+      "versionCode":2,
       "permissions":[]
     },
     "web": {
